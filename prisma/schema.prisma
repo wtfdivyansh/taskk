@@ -1,0 +1,160 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String         @id 
+  name         String?
+  email        String     @unique
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  profileImage String?
+  username     String    @unique
+  boards       Board[]
+  boardMember  BoardMember[]
+  notifications Notification[]
+  tags         Tags[]
+  pinnedBoards UserPinnedBoard[]
+  assignedTasks  Task[]            @relation("AssignedTo")
+  createdTasks   Task[]            @relation("CreatedBy")
+
+}
+
+model Board {
+  id            String         @id @default(uuid())
+  name          String
+  thumbnail     String?
+  user          User           @relation(fields: [userId], references: [id])
+  userId        String
+  dueDate       DateTime
+  description   String?
+  status        String         @default("In Progress")
+  columns       Column[]
+  priority      String         @default("Low")
+  isPersonal    Boolean        @default(false)
+  boardMembers  BoardMember[]
+  notifications Notification[]
+  tags          BoardTags[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  pinnedBoards  UserPinnedBoard[]
+  inviteCode    String         @unique
+  
+}
+
+model Column {
+  id        String   @id @default(uuid())
+  name      String
+  board     Board    @relation(fields: [boardId], references: [id])
+  boardId   String
+  todos     Task[]
+  position  Int?
+  color     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Task {
+  id        String   @id @default(uuid())
+  title     String
+  content   String?
+  position  Int
+  priority  String?
+  dueDate   DateTime?
+  startTime DateTime?
+  endTime   DateTime?
+  image     String?
+  isCompleted Boolean @default(false)
+  assignee    User?      @relation("AssignedTo", fields: [assigneeId], references: [id])
+  assigneeId  String?
+  createdBy   User?       @relation("CreatedBy", fields: [createdById], references: [id])
+  createdById String?
+  column    Column   @relation(fields: [columnId], references: [id])
+  columnId  String
+  tags      TaskTags[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  subtasks  Subtask[]
+}
+
+model Tags {
+  id      String    @id @default(uuid())
+  name    String
+  userId  String
+  user    User      @relation(fields: [userId], references: [id])
+  color   String?
+  boardTags  BoardTags[]
+  taskTags   TaskTags[]
+}
+
+model BoardMember {
+  id        String   @id @default(uuid())
+  board     Board    @relation(fields: [boardId], references: [id])
+  boardId   String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  role      String?   
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  type      String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  board     Board    @relation(fields: [boardId], references: [id])
+  boardId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BoardTags {
+  boardId String
+  tagId   String
+  board   Board @relation(fields: [boardId], references: [id])
+  tag     Tags  @relation(fields: [tagId], references: [id])
+
+  @@id([boardId, tagId])
+}
+
+model TaskTags {
+  taskId String
+  tagId  String
+  task   Task @relation(fields: [taskId], references: [id])
+  tag    Tags @relation(fields: [tagId], references: [id])
+
+  @@id([taskId, tagId])
+}
+model UserPinnedBoard {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  board     Board    @relation(fields: [boardId], references: [id])
+  boardId   String
+  order     Int?
+
+  @@unique([userId, boardId])
+}
+
+model Subtask {
+  id          String   @id @default(uuid())
+  title       String
+  isCompleted Boolean  @default(false)
+  task        Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+

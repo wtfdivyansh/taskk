@@ -1,0 +1,25 @@
+.fc-col-header {
+    background: #17405d;
+    color: white;
+    border:none
+}
+.fc-scrollgrid-sync-inner{
+    background: #0a0a0a;
+    border:none;
+    padding:40px
+}
+.fc-col-header {
+  border-radius: 16px !important;
+}
+
+.fc-scrollgrid-section > td {
+  border-radius: 0px 0px 16px 16px !important;
+}
+
+.fc-scrollgrid-section > th {
+  border-radius: 0px 16px 0px 0px !important;
+}
+
+.fc-scrollgrid {
+  border-radius: 16px !important;
+}
