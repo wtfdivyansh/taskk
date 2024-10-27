@@ -8,6 +8,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MessageSquare, Paperclip } from "lucide-react";
 import { TaskProps } from "@/lib/types";
 import { Draggable } from "@hello-pangea/dnd";
+import Link from "next/link";
+import { TaskSheet } from "./sheet/task-sheet";
 
 interface SingleCardProps {
   task: {
@@ -40,8 +42,7 @@ export default function SingleCard({task,index}:TaskProps) {
   return (
     <Draggable draggableId={task.id} index={index} >
       {(provided,snapshot) => {
-      return(
-        
+      return (
         <div
           className="flex flex-col mx-auto w-full drag:top-auto drag:left-auto  "
           {...provided.draggableProps}
@@ -49,10 +50,9 @@ export default function SingleCard({task,index}:TaskProps) {
           {...provided.dragHandleProps}
           style={{
             ...provided.draggableProps.style,
-            left:"auto !important",
+            left: "auto !important",
             top: "auto !important",
           }}
-
         >
           <Card className="flex flex-col bg-[#0d0d0d] shadow-md border  border-neutral-700/[0.2] rounded-xl cursor-grab ">
             {task.image && (
@@ -67,17 +67,18 @@ export default function SingleCard({task,index}:TaskProps) {
               </>
             )}
             <div className="flex flew-row px-2 gap-x-2 my-2">
-              {task.tags && task.tags.map((t, index) => (
-                <Badge
-                  key={index}
-                  className={cn(
-                    "text-xs text-neutral-300 w-fit h-fit px-1 ",
-                    t.tag.color
-                  )}
-                >
-                  {t.tag.name}
-                </Badge>
-              ))}
+              {task.tags &&
+                task.tags.map((t, index) => (
+                  <Badge
+                    key={index}
+                    className={cn(
+                      "text-xs text-neutral-300 w-fit h-fit px-1 ",
+                      t.tag.color
+                    )}
+                  >
+                    {t.tag.name}
+                  </Badge>
+                ))}
               <Badge
                 className={cn(
                   "text-xs text-neutral-300 w-fit h-fit px-1 flex flex-row items-center gap-x-1",
@@ -93,15 +94,21 @@ export default function SingleCard({task,index}:TaskProps) {
                 {task.priority}
               </Badge>
             </div>
-            <div className="flex flex-col  flex-grow px-2 pb-4">
-              <p className="text-white text-md">{task.title}</p>
-              {task.content && (
-                <p className="text-neutral-500 text-sm">
-                  {task.content?.slice(0, 35)}{" "}
-                  {task?.content?.length > 36 ? "..." : ""}
-                </p>
-              )}
+            <div>
+              {/* // @ts-ignore */}
+              <TaskSheet task={task}>
+                <div className="flex flex-col  flex-grow px-2 pb-4">
+                  <p className="text-white text-md">{task.title}</p>
+                  {task.content && (
+                    <p className="text-neutral-500 text-sm">
+                      {task.content?.slice(0, 35)}{" "}
+                      {task?.content?.length > 36 ? "..." : ""}
+                    </p>
+                  )}
+                </div>
+              </TaskSheet>
             </div>
+
             <div className="flex flex-col mt-1 gap-x-1 pb-2 px-2 ">
               <div className="flex flex-row items-center gap-x-2 w-full justify-between">
                 <div>
@@ -118,7 +125,7 @@ export default function SingleCard({task,index}:TaskProps) {
             </div>
           </Card>
         </div>
-      )}}
+      );}}
     </Draggable>
   );
 }

@@ -1,10 +1,11 @@
 "use server"
 import prisma from "@/lib/db";
+import { cache } from "react";
 
-export async function GetBoardMembers(boardId: string) {
+export async function GetBoardMembers (boardId: string) {
     const boardMembers = await prisma.boardMember.findMany({
       where: {
-        boardId: boardId,
+        boardId: boardId
       },
       select:{
         id:true,

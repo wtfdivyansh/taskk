@@ -1,78 +1,53 @@
 import prisma from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
-import { revalidatePath } from "next/cache";
 
-export const getTaskDetails = async (taskId: string, search?: string) => {
+
+export const getTaskDetails = async (boardId: string, search?: string) => {
   const user = await currentUser();
   if (!user) {
     throw new Error("User not found");
   }
- 
 
   const baseQuery = {
     where: {
-      id: taskId,
+      boardId: boardId,
     },
     include: {
-      columns: {
+      todos: {
         include: {
-          todos: {
+          tags: {
             include: {
-              tags: {
-                include: {
-                  tag: true,
-                },
-              },
+              tag: true,
             },
           },
         },
       },
-      tags: {
-        include: {
-          tag: true,
-        },
-      },
-      boardMembers: {
-       include:{
-         user: true,
-       }
-      },
-      
-      
     },
   };
 
   if (search && search.trim() !== "") {
-
-    const task = await prisma.board.findUnique({
+    const columns = await prisma.column.findMany({
       ...baseQuery,
       include: {
         ...baseQuery.include,
-        columns: {
-          ...baseQuery.include.columns,
-          include: {
-            ...baseQuery.include.columns.include,
-            todos: {
-              ...baseQuery.include.columns.include.todos,
-              where: {
-                title: {
-                  contains: search,
-                  mode: "insensitive", 
-                },
-              },
+        todos: {
+          ...baseQuery.include.todos,
+          where: {
+            title: {
+              contains: search,
+              mode: "insensitive",
             },
           },
         },
       },
     });
-    
 
-    if (!task || task.columns.every((column) => column.todos.length === 0)) {
-      return await prisma.board.findUnique(baseQuery);
+    if (!columns || columns.every((column) => column.todos.length === 0)) {
+      // If no todos found with search, return all columns with their original todos
+      return await prisma.column.findMany(baseQuery);
     }
-     revalidatePath("/tasks/" + task.id);
-    return task;
+    return columns;
   } else {
-    return await prisma.board.findUnique(baseQuery);
+    return await prisma.column.findMany(baseQuery);
   }
 };

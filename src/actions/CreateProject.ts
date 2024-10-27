@@ -2,7 +2,9 @@
 
 import prisma from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
+import { unstable_cache as cache } from "next/cache";
+
 import { v4 as uuidv4 } from 'uuid';
 
 export const CreateProject = async( { name, dueDate, status, tags, description, priority }: any) => {
@@ -37,63 +39,11 @@ export const CreateProject = async( { name, dueDate, status, tags, description, 
         }
       },
     });
-      revalidatePath("/tasks");
+      revalidateTag(`projects-${user.id}`);
 
     return project;
 };
 
-export const getProjects = async () => {
-  const user = await currentUser();
-  if (!user) {
-    throw new Error("User not found");
-  }
-
-  const createdProjects = await prisma.board.findMany({
-    where: {
-      userId: user.id,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: {
-      tags: {
-        include: {
-          tag: true,
-        },
-      },
-    },
-    
-  });
-
-  const memberProjects = await prisma.board.findMany({
-    where: {
-      boardMembers: {
-        some: {
-          userId: user.id,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: {
-      tags: {
-        include: {
-          tag: true,
-        },
-      },
-    },
-  });
-  
    
 
-  const allProjects = [...createdProjects, ...memberProjects];
 
-
-  const uniqueProjects = allProjects.filter(
-    (project, index, self) =>
-      index === self.findIndex((t) => t.id === project.id)
-  );
-
-  return uniqueProjects;
-};

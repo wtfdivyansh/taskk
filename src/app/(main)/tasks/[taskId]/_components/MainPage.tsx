@@ -1,34 +1,31 @@
-import { ProjectHeader } from "@/app/components/ProjectHeader";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { CalendarCheck, CircleCheck, CircleDot, Flag, Loader2, LoaderIcon, LoaderPinwheel, Plus, UserPlus } from "lucide-react";
-import { FcCancel } from "react-icons/fc";
-import { RxLapTimer } from "react-icons/rx";
-import { LiaTagSolid } from "react-icons/lia";
-import Main from "./_components/main";
-import AddMember from "./_components/addMember";
-import { currentUser } from "@clerk/nextjs/server";
 import { GetProjectInfo } from "@/actions/GetProjectInfo";
-import { Suspense } from "react";
-import Loading from "../loading";
+import { ProjectHeader } from "@/app/components/ProjectHeader";
+import { Button } from "@/components/ui/button";
+import { CalendarCheck, CircleCheck, CircleDot, Flag, LoaderIcon, UserPlus } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import AddMember from "./addMember";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import { RxLapTimer } from "react-icons/rx";
+import { FcCancel } from "react-icons/fc";
+import { LiaTagSolid } from "react-icons/lia";
+import { currentUser } from "@clerk/nextjs/server";
+import Main from "./main";
 
-
-export default async function TaskPage({
+export const MainPage = async({
   params,
+  searchParams,
 }: {
   params: { taskId: string };
-}) {
-  const user = await currentUser();
-  const task = await GetProjectInfo(params.taskId);
-
-  if (!task) {
-    return <div>Task not found</div>;
-  }
+  searchParams: { [search: string]: string | undefined };
+}) => {
+      const user = await currentUser()
+      const task = await GetProjectInfo(params.taskId);
+      if(!task){
+        return null
+      }
   return (
-    <div className="border-l-[1px] border-t-[1px] pb-20 h-screen rounded-l-3xl backdrop-blur-sm border-muted-foreground/20 overflow-scroll mt-2 bg-[#0F1011]">
-      <div>
+     <div>
         <div className="flex flex-col gap-1 relative bg-[#0F1011]">
           <ProjectHeader name={task.name} />
         </div>
@@ -59,14 +56,9 @@ export default async function TaskPage({
                   className="text-xs  bg-white ring-1/[0.5] ring-white mx-2 flex flex-row items-center gap-x-1"
                 >
                   <div>
-                    {mem.user.profileImage && (
-                      <img
-                        src={mem.user.profileImage}
-                        className="w-4 h-4 rounded-full"
-                      />
-                    )}
+                    {mem.user.profileImage && <img src={mem.user.profileImage} className="w-4 h-4 rounded-full" />}
                   </div>
-                  {mem.user.name === user?.firstName ? "You" : mem.user.name}
+                 {mem.user.name === user?.firstName ? "You" : mem.user.name}
                 </Badge>
               ))}
               <AddMember id={task.id} />
@@ -120,11 +112,8 @@ export default async function TaskPage({
               ))}
             </div>
           </div>
-          <Suspense fallback={<Loading />}>
-            <Main boardId={task.id} />
-          </Suspense>
+          <Main boardId={task.id} />
         </div>
       </div>
-    </div>
-  );
+  )
 }

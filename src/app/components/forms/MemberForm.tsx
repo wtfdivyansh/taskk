@@ -30,6 +30,7 @@ import { GetBoardMembers } from "@/actions/GetBoardMembers";
 import toast from "react-hot-toast";
 import { useCallback } from "react";
 import { useMemberData } from "@/hooks/use-member-data";
+import { pusherClient, pusherServer } from "@/lib/pusher";
 
 
 const formSchema = z.object({
@@ -84,6 +85,25 @@ export function MemberForm() {
   useEffect(() => {
     console.log(usersNotInBoard,boardMembers);
   }, [usersNotInBoard,boardMembers]);
+   // todo implement realtime invite in notification not here
+  // useEffect(() => {
+  //   pusherClient.subscribe("invite");
+  //   pusherClient.bind("invite", (data: any) => {
+  //     console.log(data);
+
+  //     const me = usersNotInBoard.find((user: any) => user.id === data.userId);
+  //     console.log(me);
+     
+  //     if (me) {
+  //       return;
+  //     }
+  //     toast.success(data.message);
+  //   });
+
+  //   return () => {
+  //     pusherClient.unsubscribe("invite"+boardId);
+  //   }
+  // }, [boardId]);
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

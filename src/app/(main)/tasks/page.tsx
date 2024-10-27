@@ -1,9 +1,12 @@
-import { getProjects } from "@/actions/CreateProject";
 import { SingleProject } from "@/app/components/SingleProject";
 import Projects from "@/app/components/projects";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import ProjectList from "./_components/ProjectList";
+import { Suspense } from "react";
+import ProjectSkeleton from "./_components/projectSkeleton";
 
 export default async function Tasks() {
-  const projects = await getProjects();
   return (
     <div className="border-l-[1px] border-t-[1px] pb-20 h-screen rounded-l-3xl backdrop-blur-sm border-muted-foreground/20 overflow-scroll mt-2 bg-[#0F1011]">
       <div className="flex flex-col gap-1 relative">
@@ -14,14 +17,10 @@ export default async function Tasks() {
       <div className="flex flex-col">
         <h1 className="text-2xl mx-3 mt-1 font-semibold">Your Projects</h1>
       </div>
-      <div className="flex flex-row flex-wrap">
-        
-        {projects.map((project) => (
-        
-          <SingleProject key={project.id} project={project} />
-        ))}
-        <Projects />
-      </div>
+      <Suspense fallback={<ProjectSkeleton />}>
+        <ProjectList />
+      </Suspense>
+      <Projects />
     </div>
   );
 }

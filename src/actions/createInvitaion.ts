@@ -1,6 +1,7 @@
 "use server";
 import prisma from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
+import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -102,6 +103,8 @@ export const acceptInvitation = async (boardId: string) => {
       role: "MEMBER",
     },
   });
+  revalidateTag(`projects-${user.id}`);
+
   redirect("/tasks/"+boardId);
  
 };  

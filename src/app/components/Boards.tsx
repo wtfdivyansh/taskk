@@ -119,6 +119,8 @@ export default function Boards({columns,boardId}:BoardsProps) {
          pusherClient.unsubscribe(boardId);
        }
      },[boardId]);
+
+     
      useEffect(() => {
        setList(columns);
      },[columns]);

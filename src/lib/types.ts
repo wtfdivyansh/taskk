@@ -63,3 +63,19 @@ export interface TaskColor {
   tags: TodoTag[];
   color:string;
 }
+ export interface Task {
+  id: string;
+  title: string;
+  content: string | null;
+  position: number;
+  priority: string | null;
+  dueDate: Date | null;
+  startTime: Date | null;
+  endTime: Date | null;
+  image: string | null;
+  columnId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  tags: TodoTag[];
+  color:string;
+}
