@@ -1,4 +1,5 @@
 "use client"
+import Subtasks from "@/app/(main)/tasks/[taskId]/_components/subtasks";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
@@ -134,9 +135,7 @@ export const TaskSheet: React.FC<props> = ({ children, task }) => (
           </TabsList>
           <TabsContent value="Subtasks" className="w-full h-full">
             <ScrollArea className="w-full h-full">
-              <div className="w-full border border-neutral-700/[0.2] bg-neutral-900/70 rounded-md p-2 flex flex-row items-start max-h-16 h-16 ">
-                <p className="text-neutral-500 text-sm text-wrap">yo</p>
-              </div>
+              <Subtasks taskId={task.id} />
             </ScrollArea>
           </TabsContent>
           <TabsContent value="Comments">
