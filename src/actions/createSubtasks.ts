@@ -32,3 +32,27 @@ export const createSubtasks = async(taskId:string,title:string)=>{
     return subtasks
 
 }
+
+
+export const toggleSubtask = async(subtaskId:string,isCompleted:boolean)=>{
+    const user = await currentUser()
+    if(!user){
+        throw new Error("Not logged in")
+    }
+    if(!subtaskId){
+        throw new Error("Subtask id is required")
+    }
+    const subtask = await prisma.subtask.update({
+        where:{
+            id:subtaskId
+        },
+        data:{
+            isCompleted:!isCompleted
+        }
+    })
+    if(!subtask){
+        throw new Error("Subtask not updated")
+    }
+    console.log("updated subtask", subtask)
+    return subtask
+}

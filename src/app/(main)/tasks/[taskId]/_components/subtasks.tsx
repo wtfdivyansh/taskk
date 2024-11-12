@@ -1,16 +1,18 @@
+
 import { Spinner } from "@/app/components/Spinner";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useSubtasks, useSubtasksData } from "@/hooks/use-subtasks";
-import { cn } from "@/lib/utils";
-import { useMemo } from "react";
 import { FiPlus } from "react-icons/fi";
+import Subtask from "./subtask";
+import SubtaskComponent from "./subtask";
 
 export default function Subtasks({taskId}:{taskId:string}) {
-const{data,isLoading}= useSubtasksData(taskId)
+ const{data,isLoading}= useSubtasksData(taskId)
  const {onSubmit,isPending,title,setTitle}= useSubtasks(taskId)
  const completedTasks = data?.filter((x)=>x.isCompleted == true).length
+
 
   return (
     <>
@@ -28,21 +30,7 @@ const{data,isLoading}= useSubtasksData(taskId)
             {isLoading && <Spinner />}
 
             {data?.map((subtask) => (
-              <div
-                key={subtask.id}
-                className="w-full border border-neutral-700/[0.2] bg-neutral-900/70 rounded-md p-2 flex flex-row items-center h-12
-                gap-x-2   "
-              >
-                <Input
-                  type="checkbox"
-                  className="text-neutral-900/70 h-4 w-4 focus-visible:ring-0 focus:visible:outline-none border-none focus:visible-border-none focus-visible:ring-offset-0 bg-transparent accent-green-500"
-                />
-                <p
-                  className={cn("text-neutral-500 text-sm font-bold text-wrap",subtask.isCompleted && "line-through, text-neutral-600")}
-                >
-                  {subtask.title}
-                </p>
-              </div>
+              <SubtaskComponent subtask={subtask}  />
             ))}
           </div>
         </ScrollArea>

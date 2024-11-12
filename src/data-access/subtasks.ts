@@ -22,6 +22,12 @@ export const getSubtasks=async(taskId:string)=>{
         },
         orderBy:{
             createdAt:"desc"
+        },
+        select:{
+            id:true,
+            title:true,
+            isCompleted:true,
+            taskId:true
         }
     })
     console.log("fetched subtasks")

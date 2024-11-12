@@ -40,7 +40,7 @@ export const useSubtasksData = (taskId:string) => {
 
             return res
         },
-        refetchOnMount:false        
+            
     })
     return {data ,isLoading}
 }
