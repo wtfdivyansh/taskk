@@ -23,6 +23,8 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { BookDashed, CalendarCheckIcon, CalendarRange, Delete, DeleteIcon, Edit, Info, NotepadText, Tags, Trash, Trash2, User2, X } from "lucide-react";
 import { RxDotsVertical } from "react-icons/rx";
+import CommentButton from "../comment/comment-button";
+import CommentBox from "../comment/comment-box";
 type props ={
     children:React.ReactNode
     task: Task
@@ -93,7 +95,7 @@ export const TaskSheet: React.FC<props> = ({ children, task }) => (
               ))}
             </div>
           </div>
-          {task.content && (
+          {task.content ? (
             <div className=" flex flex-col w-full gap-y-2 item-center ">
               <div className="flex flex-row gap-x-1 ">
                 <NotepadText className=" text-neutral-500  size-6"></NotepadText>
@@ -108,6 +110,21 @@ export const TaskSheet: React.FC<props> = ({ children, task }) => (
                   </p>
                 </div>
               )}
+            </div>
+          ) : (
+            <div className=" flex flex-col w-full gap-y-2 item-center ">
+              <div className="flex flex-row gap-x-1 ">
+                <NotepadText className=" text-neutral-500  size-6"></NotepadText>
+                <p className="text-md text-neutral-500 text-justify ">
+                  Description{" "}
+                </p>
+              </div>
+
+              <div className="w-full border border-neutral-700/[0.2] bg-neutral-900/70 rounded-md p-2 flex flex-row items-start max-h-16 h-16 ">
+                <p className="text-neutral-600 text-sm text-wrap">
+                  Add a description to your task
+                </p>
+              </div>
             </div>
           )}
         </div>
@@ -140,9 +157,8 @@ export const TaskSheet: React.FC<props> = ({ children, task }) => (
           </TabsContent>
           <TabsContent value="Comments">
             <ScrollArea className="w-full h-full">
-              <div className="w-full border border-neutral-700/[0.2] bg-neutral-900/70 rounded-md p-2 flex flex-row items-start max-h-16 h-16 ">
-                <p className="text-neutral-500 text-sm text-wrap">yooo</p>
-              </div>
+              <CommentBox />
+              <CommentButton taskId={task.id} />
             </ScrollArea>
           </TabsContent>
           <TabsContent value="Attachments">

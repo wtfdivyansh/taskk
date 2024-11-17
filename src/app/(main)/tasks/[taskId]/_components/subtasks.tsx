@@ -8,13 +8,13 @@ import { FiPlus } from "react-icons/fi";
 import Subtask from "./subtask";
 import SubtaskComponent from "./subtask";
 import AnimatedCircularProgressBar from "@/components/ui/animated-circular-progress-bar";
+import SubtaskButton from "./subtask-button";
 
 export default function Subtasks({taskId}:{taskId:string}) {
  const{data,isLoading}= useSubtasksData(taskId)
- const {onSubmit,isPending,title,setTitle}= useSubtasks(taskId)
  const completedTasks = data?.filter((x)=>x.isCompleted == true).length
  if (data == undefined) {
-   return <div>Loading...</div>;
+   return <Spinner/>
  }
 
   return (
@@ -38,7 +38,7 @@ export default function Subtasks({taskId}:{taskId:string}) {
         </div>
         <ScrollArea className="w-full">
           {data.length == 0 ? (
-            <div className="flex flex-col items-center justify-center gap-y-2  text-neutral-500">
+            <div className="flex flex-col items-center justify-center gap-y-2 h-full text-neutral-500">
               <p>No Subtasks</p>
               <p>Add a new Subtask</p>
             </div>
@@ -53,22 +53,7 @@ export default function Subtasks({taskId}:{taskId:string}) {
           )}
         </ScrollArea>
       </div>
-      <div className="mt-1 bg-neutral-900/50 text-white px-2 py-1 rounded-md flex flex-row justify-start items-center gap-x-2 group cursor-pointer border border-neutral-700/[0.2]">
-        <div
-          className="flex flex-row items-center gap-x-2 border border-neutral-700/[0.2] rounded-md p-1 hover:bg-neutral-700/[0.2]"
-          onClick={onSubmit}
-        >
-          <FiPlus size={20} className="text-neutral-200 " />
-        </div>
-        <Separator orientation="vertical" className="bg-neutral-900" />
-        <Input
-          className="text-neutral-500 focus-visible:ring-0 focus:visible:outline-none border-none focus:visible-border-none focus-visible:ring-offset-0 bg-transparent"
-          placeholder="Add a new Subtask"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          disabled={isPending}
-        ></Input>
-      </div>
+     <SubtaskButton taskId={taskId}/>
     </>
   );
 }

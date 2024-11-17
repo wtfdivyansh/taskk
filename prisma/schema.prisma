@@ -28,7 +28,7 @@ model User {
   pinnedBoards UserPinnedBoard[]
   assignedTasks  Task[]            @relation("AssignedTo")
   createdTasks   Task[]            @relation("CreatedBy")
-
+  comments       Comment[]
 }
 
 model Board {
@@ -86,6 +86,7 @@ model Task {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   subtasks  Subtask[]
+  comments  Comment[]
 }
 
 model Tags {
@@ -158,3 +159,13 @@ model Subtask {
   updatedAt   DateTime @updatedAt
 }
 
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  taskId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade) 
+  userId    String
+}
