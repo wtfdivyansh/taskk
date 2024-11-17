@@ -3,8 +3,9 @@ import { toggleSubtask } from "@/actions/createSubtasks";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Subtask} from "@prisma/client";
-import { QueryClient, useMutation } from "@tanstack/react-query";
-import { Old_Standard_TT } from "next/font/google";
+import {  useMutation, useQueryClient } from "@tanstack/react-query";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 interface SubtaskProps {
     subtask: {
         id: string;
@@ -14,7 +15,7 @@ interface SubtaskProps {
     }
 }
 export default function SubtaskComponent({ subtask }: SubtaskProps) {
-    const query = new QueryClient()
+const query =  useQueryClient()
     
 const mutation = useMutation({
   mutationFn: async () => {
@@ -43,28 +44,26 @@ const mutation = useMutation({
   },
 });
     return (
-      <div
-        key={subtask.id}
-        className="w-full border border-neutral-700/[0.2] bg-neutral-900/70 rounded-md p-2 flex flex-row items-center h-12
-                gap-x-2   "
+    <div className="flex gap-2 border border-neutral-700/[0.2] bg-neutral-900/70 rounded-md p-2  flex-row items-center h-12">  
+      <Checkbox
+        id={subtask.id}
+        className="rounded-full data-[state=checked]:border-emerald-500 data-[state=checked]:bg-emerald-500"
+        defaultChecked = {subtask.isCompleted}
+
+        onCheckedChange={() => mutation.mutate()}
+      />
+      <Label
+        htmlFor="checkbox-06"
+        className="peer-data-[state=checked]:line-throgh relative after:absolute after:left-0 after:top-1/2 after:h-px after:w-full after:origin-bottom after:-translate-y-1/2 after:scale-x-0 after:bg-muted-foreground after:transition-transform after:ease-in-out peer-data-[state=checked]:text-muted-foreground peer-data-[state=checked]:after:origin-bottom peer-data-[state=checked]:after:scale-x-100"
       >
-        <Input
-          type="checkbox"
-          className="text-neutral-900/70 h-4 w-4 focus-visible:ring-0 focus:visible:outline-none border-none focus:visible-border-none focus-visible:ring-offset-0 bg-transparent accent-green-500"
-          checked={subtask.isCompleted}
-          onChange={() => mutation.mutate()}
-        />
-        <p
-          className={cn(
-            "text-neutral-500 text-sm font-bold text-wrap",
-            subtask.isCompleted && "line-through, text-neutral-600"
-          )}
-        >
-          {subtask.title}
-        </p>
-      </div>
-    );
+        {subtask.title}
+      </Label>
+    </div>
+  );
 }
+
+
+
 
         
             

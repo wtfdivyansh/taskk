@@ -37,7 +37,6 @@ export const useSubtasksData = (taskId:string) => {
         queryKey:["subtasks",taskId],
         queryFn:async()=>{
             const res = await getSubtasks(taskId)
-
             return res
         },
             
