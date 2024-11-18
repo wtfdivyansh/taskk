@@ -157,7 +157,7 @@ export const TaskSheet: React.FC<props> = ({ children, task }) => (
           </TabsContent>
           <TabsContent value="Comments">
             <ScrollArea className="w-full h-full">
-              <CommentBox />
+              <CommentBox taskId={task.id} />
               <CommentButton taskId={task.id} />
             </ScrollArea>
           </TabsContent>

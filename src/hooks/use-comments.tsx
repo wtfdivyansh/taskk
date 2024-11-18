@@ -1,6 +1,7 @@
 "use client"
 import { createComment } from "@/actions/createComment";
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { getComments } from "@/data-access/comments";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useState } from "react";
 
 export const useCommentMutation = (taskId:string)=>{
@@ -25,5 +26,20 @@ export const useCommentMutation = (taskId:string)=>{
     setComment,
     isPending,
     onSubmit
+  }
+}
+
+export const useComments = (taskId:string)=>{
+  const {data,isLoading } = useQuery({
+    queryKey: ["comments",taskId],
+    queryFn: async () => {
+      const res =await getComments(taskId);
+      console.log(res)
+      return res
+    },
+  });
+  return {
+    data,
+    isLoading
   }
 }
