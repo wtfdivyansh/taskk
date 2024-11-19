@@ -6,7 +6,7 @@ import ProjectList from "./_components/ProjectList";
 import { Suspense } from "react";
 import ProjectSkeleton from "./_components/projectSkeleton";
 
-export default async function Tasks() {
+export default function Tasks() {
   return (
     <div className="border-l-[1px] border-t-[1px] pb-20 h-screen rounded-l-3xl backdrop-blur-sm border-muted-foreground/20 overflow-scroll mt-2 bg-[#0F1011]">
       <div className="flex flex-col gap-1 relative">

@@ -16,8 +16,9 @@ interface CommentProps {
 export default function Comment({ comment }: CommentProps) {
     const auth = useAuth();
     const isCommentByCurrentUser = comment.user.id === auth.userId;
+    
   return (
-    <div className="flex flex-row items-center gap-x-2">
+    <div className={cn("flex flex-row gap-x-2 items-center", {"justify-end": isCommentByCurrentUser})}>
       <div className="h-8 w-8 rounded-full">
         <img
           src={comment.user.profileImage || "https://github.com/shadcn.png"}
@@ -25,7 +26,7 @@ export default function Comment({ comment }: CommentProps) {
           className="h-8 w-8 rounded-full"
         />
       </div>
-      <div className={cn("flex flex-col gap-y-1", {"border-green-500 border-2": isCommentByCurrentUser})}>
+      <div className={cn("flex flex-col gap-y-1", {"border-green-500 border-2 ": isCommentByCurrentUser})}>
         <p className="text-neutral-500 text-sm text-wrap">
           {comment.user.name}
         </p>
