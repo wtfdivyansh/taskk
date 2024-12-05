@@ -6,9 +6,6 @@ import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { Column, Todo } from "@/lib/types";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getTaskDetails } from "@/actions/getTaskDetails";
-import { getColumns } from "@/actions/getColumns";
 import { pusherClient } from "@/lib/pusher";
 interface BoardsProps {
   columns: Column[];

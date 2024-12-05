@@ -18,20 +18,37 @@ export default function Comment({ comment }: CommentProps) {
     const isCommentByCurrentUser = comment.user.id === auth.userId;
     
   return (
-    <div className={cn("flex flex-row gap-x-2 items-center", {"justify-end": isCommentByCurrentUser})}>
-      <div className="h-8 w-8 rounded-full">
-        <img
-          src={comment.user.profileImage || "https://github.com/shadcn.png"}
-          alt="profile"
-          className="h-8 w-8 rounded-full"
-        />
-      </div>
-      <div className={cn("flex flex-col gap-y-1", {"border-green-500 border-2 ": isCommentByCurrentUser})}>
-        <p className="text-neutral-500 text-sm text-wrap">
-          {comment.user.name}
+    <div
+      className={cn("flex flex-row gap-x-2 items-start", {
+        "justify-end": isCommentByCurrentUser,
+      })}
+    >
+      {!isCommentByCurrentUser && (
+        <div className="h-8 w-8 rounded-full">
+          <img
+            src={comment.user?.profileImage || "https://github.com/shadcn.png"}
+            alt="profile"
+            className="h-8 w-8 rounded-full"
+          />
+        </div>
+      )}
+      <div
+        className={cn("flex flex-col ")}
+      >
+        <p className={cn("text-neutral-500 text-sm text-wrap",{"text-end": isCommentByCurrentUser})}>
+          {isCommentByCurrentUser ? "You" : comment.user.name}
         </p>
         <p className="text-neutral-400 text-sm text-wrap">{comment.content}</p>
       </div>
+      {isCommentByCurrentUser && (
+        <div className="h-8 w-8 rounded-full">
+          <img
+            src={comment.user.profileImage || "https://github.com/shadcn.png"}
+            alt="profile"
+            className="h-8 w-8 rounded-full"
+          />
+        </div>
+      )}
     </div>
   );
 }

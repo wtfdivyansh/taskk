@@ -29,7 +29,7 @@ export default function Subtasks({taskId}:{taskId:string}) {
               max={data.length}
               value={completedTasks!}
               min={0}
-              gaugePrimaryColor="rgb(79 70 229)"
+              gaugePrimaryColor="rgb(74 222 128)"
               gaugeSecondaryColor="rgba(0, 0, 0, 0.1)"
               className="h-6 w-6 font-sm"
             />
@@ -53,7 +53,7 @@ export default function Subtasks({taskId}:{taskId:string}) {
           )}
         </ScrollArea>
       </div>
-     <SubtaskButton taskId={taskId}/>
+      <SubtaskButton taskId={taskId} />
     </>
   );
 }

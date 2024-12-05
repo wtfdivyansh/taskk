@@ -15,7 +15,7 @@ export const getComments=async(taskId:string)=>{
             taskId:taskId
         },
         orderBy:{
-            createdAt:"desc"
+            createdAt:"asc"
         },
         select:{
             id:true,

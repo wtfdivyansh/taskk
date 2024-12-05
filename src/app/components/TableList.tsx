@@ -1,30 +1,20 @@
+"use client"
 import { BoardsProps } from "@/lib/types";
-import { format} from "date-fns";
 import { columnsList } from "./table/columns";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { RiProgress4Line } from "react-icons/ri";
 import { DataTable } from "./table/data-table";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { useCardModalStore} from "@/hooks/use-modal-store";
 export default function TableList({ columns }: BoardsProps ) {
+  const {setIsOpen}= useCardModalStore()
   
   return (
     <div className="flex flex-col mx-auto rounded-lg bg-[#0b0b0b] w-full h-screen gap-y-1 ">
@@ -70,7 +60,7 @@ export default function TableList({ columns }: BoardsProps ) {
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className=" w-full  bg-black/30 p-2 ">
-                    <div className="flex flex-col mx-auto mt-4  rounded-lg w-full  ">
+                    <div className="flex flex-col mx-auto mt-4  rounded-lg w-full  " onClick={()=>setIsOpen(true)}>
                       <Button className=" bg-black text-muted-foreground rounded-lg px-2 w-[96%] mx-auto border-dashed border-neutral-700/[0.6] border-2 hover:bg-neutral-900/40 hover:text-white ">
                         <Plus className="mr-2 h-4 w-4" />
                       </Button>

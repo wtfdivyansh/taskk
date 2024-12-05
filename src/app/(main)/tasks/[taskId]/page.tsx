@@ -45,14 +45,14 @@ export default async function TaskPage({
           <div className="px-4 flex flex-col gap-y-4">
             <div className="flex flex-row items-center gap-x-1 gap-y-1">
               <Flag size={16} className="text-neutral-500" />
-              <span className="text-neutral-500">Priority:</span>
+              <span className="text-neutral-500 w-24">Priority:</span>
               <Badge className="text-xs  bg-sky-500/40 text-sky-500 ring-1/[0.5] ring-white mx-2">
                 {task.priority}
               </Badge>
             </div>
             <div className="flex flex-row items-center gap-x-1">
               <UserPlus size={16} className="text-neutral-500" />
-              <span className="text-neutral-500">Team:</span>
+              <span className="text-neutral-500 w-24">Team:</span>
               {task.boardMembers.map((mem, index) => (
                 <Badge
                   key={index}
@@ -73,14 +73,14 @@ export default async function TaskPage({
             </div>
             <div className="flex flex-row items-center gap-x-1">
               <CalendarCheck size={16} className="text-neutral-500" />
-              <span className="text-neutral-500">Due Date:</span>
-              <span className="text-white text-sm font-mono">
+              <span className="text-neutral-500 w-24">Due Date:</span>
+              <span className="text-white text-sm font-mono mx-2">
                 {format(new Date(), "dd MMMM yyyy")}
               </span>
             </div>
             <div className="flex flex-row items-center gap-x-1">
               <LoaderIcon size={16} className="text-neutral-500" />
-              <span className="text-neutral-500">Status:</span>
+              <span className="text-neutral-500 w-24">Status:</span>
               <Badge
                 className={cn(
                   "text-xs  mx-2 flex flex-row items-center gap-x-1 shadow-md",
@@ -104,9 +104,9 @@ export default async function TaskPage({
                 {task.status}
               </Badge>
             </div>
-            <div className="flex flex-row items-center gap-x-2">
+            <div className="flex flex-row items-center gap-x-1">
               <LiaTagSolid className="text-neutral-500" size={16} />
-              <span className="text-neutral-500">Tags:</span>
+              <span className="text-neutral-500 w-24">Tags:</span>
               {task.tags.map((t, index) => (
                 <Badge
                   key={index}
