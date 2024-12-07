@@ -8,14 +8,16 @@ import { use, useEffect, useRef } from "react";
 export default function CommentBox({taskId}:{taskId:string}) {
   const bottomRef = useRef<HTMLDivElement>(null);
   const {data,isLoading}= useComments(taskId)
-  if(!data){
-    return <div>no data found! Please refetch</div>
-  }
+  
+  const hasComments = data && data?.length > 0;
   useEffect(() => {
-    if (bottomRef.current) {
+    if (bottomRef.current && hasComments) {
       bottomRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [data.length]);
+  }, [data?.length, hasComments]);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
    
       <div className="w-full border border-neutral-700/[0.2] bg-neutral-900/70 rounded-md p-2 flex flex-col items-start h-[21rem] ">

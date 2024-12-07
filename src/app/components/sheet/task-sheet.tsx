@@ -25,6 +25,8 @@ import { BookDashed, CalendarCheckIcon, CalendarRange, Delete, DeleteIcon, Edit,
 import { RxDotsVertical } from "react-icons/rx";
 import CommentButton from "../comment/comment-button";
 import CommentBox from "../comment/comment-box";
+import AttachmentBox from "../attachment/attachment-box";
+import AttachmentButton from "../attachment/attachment-button";
 type props ={
     children:React.ReactNode
     task: Task
@@ -163,9 +165,7 @@ export const TaskSheet: React.FC<props> = ({ children, task }) => (
           </TabsContent>
           <TabsContent value="Attachments">
             <ScrollArea className="w-full h-full">
-              <div className="w-full border border-neutral-700/[0.2] bg-neutral-900/70 rounded-md p-2 flex flex-row items-start  h-full ">
-                <p className="text-neutral-500 text-sm text-wrap">yooooo</p>
-              </div>
+              <AttachmentBox taskId={task.id} />
             </ScrollArea>
           </TabsContent>
         </Tabs>
