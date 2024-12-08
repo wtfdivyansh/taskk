@@ -175,6 +175,7 @@ model Attachment {
   id        String   @id @default(uuid())
   name      String
   url       String
+  type      String
   task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
   taskId    String
   createdAt DateTime @default(now())

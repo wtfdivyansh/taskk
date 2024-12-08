@@ -1,22 +1,20 @@
 import { UploadCloud } from "lucide-react"
 import { useUploadThing } from "@/lib/uploadthing";
 import { useDropzone } from "@uploadthing/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { generateClientDropzoneAccept, generatePermittedFileTypes } from "uploadthing/client";
 import Attachment from "./attachment";
-import { start } from "repl";
+import { uploadFiles } from "@/actions/uploadFiles";
 export default function AttachmentButton({taskId}:{taskId:string}) {
-  const [files, setFiles] = useState<File[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const onDrop = useCallback(async(acceptedFiles: File[]) => {
-    setFiles(acceptedFiles);
     setUploadedFiles((files)=>[...acceptedFiles,...files]);
     await startUpload(acceptedFiles);
   }, []);
   const { startUpload,routeConfig } = useUploadThing("imageUploader", {
     onClientUploadComplete: async(uploadResult) => {
-      alert(JSON.stringify(uploadResult));
-      
+     const files = await uploadFiles({uploadResult,taskId});
+     console.log(files);
     },
     onUploadError: () => {
       alert("error occurred while uploading");
