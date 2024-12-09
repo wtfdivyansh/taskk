@@ -5,22 +5,25 @@ import { useCallback, useState } from "react";
 import { generateClientDropzoneAccept, generatePermittedFileTypes } from "uploadthing/client";
 import Attachment from "./attachment";
 import { uploadFiles } from "@/actions/uploadFiles";
+import { useAttachmentMutation } from "@/hooks/use-attachments";
 export default function AttachmentButton({taskId}:{taskId:string}) {
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const { mutate } = useAttachmentMutation(taskId);
+  const [files,setFiles] = useState<File[]>([]);
   const onDrop = useCallback(async(acceptedFiles: File[]) => {
-    setUploadedFiles((files)=>[...acceptedFiles,...files]);
+    setFiles(acceptedFiles);
     await startUpload(acceptedFiles);
   }, []);
-  const { startUpload,routeConfig } = useUploadThing("imageUploader", {
+  const { startUpload,routeConfig,isUploading } = useUploadThing("imageUploader", {
     onClientUploadComplete: async(uploadResult) => {
-     const files = await uploadFiles({uploadResult,taskId});
+     const files = await mutate({uploadResult});
      console.log(files);
+     setFiles([]);
     },
     onUploadError: () => {
-      alert("error occurred while uploading");
+      setFiles([]);
     },
     onUploadBegin: () => {
-      alert("upload has begun");
+    
     },
   });
   const { getRootProps, getInputProps } = useDropzone({
@@ -35,7 +38,7 @@ export default function AttachmentButton({taskId}:{taskId:string}) {
         className="w-full p-6 border border-neutral-700/[0.2] bg-neutral-900/70 rounded-md flex flex-row items-center justify-center cursor-pointer my-1"
         {...getRootProps()}
       >
-        <input {...getInputProps()} />
+        <input {...getInputProps()} multiple />
         <div>
           <div className="flex flex-col items-center justify-center gap-y-1">
             <div className="w-10 h-10 border border-blue-700/[0.8] flex items-center justify-center rounded-md bg-sky-600 bg-blend-normal">
@@ -52,8 +55,8 @@ export default function AttachmentButton({taskId}:{taskId:string}) {
         </div>
       </div>
       <div className="flex flex-row gap-x-2 gap-y-1 flex-wrap ">
-        {uploadedFiles.length > 0 &&
-          uploadedFiles.map((file) => <Attachment attachment={file} />)}
+        { isUploading && files.map((file) => <Attachment attachment={file} isUploading={isUploading} />)}
+        
       </div>
     </>
   );

@@ -18,5 +18,6 @@ export const uploadFiles = async({uploadResult,taskId}:{uploadResult:ClientUploa
     skipDuplicates: true,
   });
   if(!files) throw new Error("Files not found");
+  console.log("files count",files.count);
   return files;
 };

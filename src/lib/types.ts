@@ -79,3 +79,13 @@ export interface TaskColor {
   tags: TodoTag[];
   color:string;
 }
+
+export interface UploadedFile{
+  id: string;
+  name: string;
+  url: string;
+  type: string;
+  taskId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
