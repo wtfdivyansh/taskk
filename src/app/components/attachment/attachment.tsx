@@ -1,6 +1,7 @@
 import { UploadedFile } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
+import Image from "next/image";
 
 export default function Attachment({ attachment,isUploading }: { attachment: File ; isUploading?:boolean }) {
 
@@ -16,7 +17,7 @@ export default function Attachment({ attachment,isUploading }: { attachment: Fil
           <Loader2 className="h-5 w-5 animate-spin text-neutral-400" />
         </div>
       ) : attachment.type.includes("image") ? (
-        <img
+        <Image
           src={URL.createObjectURL(attachment)}
           alt="attachment"
           className="w-8 h-8 rounded-sm object-cover"
@@ -48,9 +49,11 @@ export const UploadedAttachment=({attachment}:{attachment:UploadedFile})=>{
      )}
    >
       {attachment.type.includes("image") ? (
-       <img
+       <Image
          src={attachment.url}
          alt="attachment"
+         width={100}
+         height={100}
          className="w-8 h-8 rounded-sm object-cover"
        />
      ) : (

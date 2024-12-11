@@ -7,15 +7,16 @@ import Attachment from "./attachment";
 import { uploadFiles } from "@/actions/uploadFiles";
 import { useAttachmentMutation } from "@/hooks/use-attachments";
 export default function AttachmentButton({taskId}:{taskId:string}) {
-  const { mutate } = useAttachmentMutation(taskId);
+
   const [files,setFiles] = useState<File[]>([]);
   const onDrop = useCallback(async(acceptedFiles: File[]) => {
     setFiles(acceptedFiles);
     await startUpload(acceptedFiles);
   }, []);
+  const {mutate} = useAttachmentMutation(taskId);
   const { startUpload,routeConfig,isUploading } = useUploadThing("imageUploader", {
     onClientUploadComplete: async(uploadResult) => {
-     const files = await mutate({uploadResult});
+     const files = mutate({uploadResult});
      console.log(files);
      setFiles([]);
     },
@@ -56,7 +57,6 @@ export default function AttachmentButton({taskId}:{taskId:string}) {
       </div>
       <div className="flex flex-row gap-x-2 gap-y-1 flex-wrap ">
         { isUploading && files.map((file) => <Attachment attachment={file} isUploading={isUploading} />)}
-        
       </div>
     </>
   );
