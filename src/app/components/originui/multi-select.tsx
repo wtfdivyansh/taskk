@@ -8,7 +8,7 @@ import axios from "axios";
 
 
 
-export default function TagSelect({onChange,SelectedTags}:{onChange:()=>void,SelectedTags:string[]}) {
+export default function TagSelect({onChange,SelectedTags}:{onChange:()=>void,SelectedTags:Option[]}) {
     const {setIsOpen} = cateogaryModalStore()
      const query = useQuery({
        queryKey: ["tags"],
@@ -21,26 +21,30 @@ export default function TagSelect({onChange,SelectedTags}:{onChange:()=>void,Sel
      label: tag.name,
      value: tag.name,
    })) || []
-   const selectedTags:Option[] = SelectedTags.map((tag: any) => ({
-     label: tag,
-     value: tag,
+   const selectedTags:Option[] = SelectedTags.map((tag: Option) => ({
+     label: tag.label,
+     value: tag.value,
    })) || []
+   console.log("selected",selectedTags)
+   console.log("tags",tags)
   return (
-    <div className="space-y-2">
+    <div className="space-y-1">
       <Label>Multiselect</Label>
       <MultipleSelector
         commandProps={{
-          label: "Select frameworks",
+          label: "Select Tags",
         }}
         onChange={onChange}
         value={selectedTags}
-        defaultOptions={tags}
+        options={tags}
+        defaultOptions={[]}
         placeholder="Select Tags"
+        loadingIndicator="Loading..."
         hideClearAllButton
         hidePlaceholderWhenSelected
         emptyIndicator={
           <Button
-            variant="outline"
+            variant="outline" 
             onClick={(e) => {
               e.stopPropagation();
               setIsOpen(true);

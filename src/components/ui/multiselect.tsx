@@ -12,6 +12,8 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
+import { Button } from "./button";
+import { cateogaryModalStore } from "@/hooks/use-modal-store";
 
 export interface Option {
   value: string;
@@ -26,7 +28,7 @@ interface GroupOption {
   [key: string]: Option[];
 }
 
-interface MultipleSelectorProps {
+export interface MultipleSelectorProps {
   value?: Option[];
   defaultOptions?: Option[];
   /** manually controlled options */
@@ -81,6 +83,7 @@ interface MultipleSelectorProps {
   >;
   /** hide the clear all button. */
   hideClearAllButton?: boolean;
+  showCreateTagButton?:boolean;
 }
 
 export interface MultipleSelectorRef {
@@ -434,6 +437,7 @@ const MultipleSelector = React.forwardRef<
       // Using default filter in `cmdk`. We don&lsquo;t have to provide it.
       return undefined;
     }, [creatable, commandProps?.filter]);
+    const { setIsOpen } = cateogaryModalStore();
 
     return (
       <Command
@@ -630,6 +634,17 @@ const MultipleSelector = React.forwardRef<
                         </>
                       </CommandGroup>
                     ))}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full p-2"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsOpen(true);
+                      }}
+                    >
+                      Add a tag
+                    </Button>
                   </>
                 )}
               </CommandList>

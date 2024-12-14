@@ -15,10 +15,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import MultipleSelector from "@/components/ui/multi";
+import MultipleSelector, { Option } from "@/components/ui/multiselect";
 import { useEffect, useState } from "react";
 import { DatePicker } from "../DatePicker";
-import { useCardModalStore } from "@/hooks/use-modal-store";
+import { cateogaryModalStore, useCardModalStore } from "@/hooks/use-modal-store";
 import { Spinner } from "../Spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -26,6 +26,7 @@ import { CreateCard } from "@/actions/CreateCard";
 import OurUploadDropzone from "../Upload";
 import StatusSelect from "../originui/status-component";
 import TagSelect from "../originui/multi-select";
+import { Label } from "@/components/ui/label";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -45,6 +46,7 @@ interface tags {
 
 export function NewCardForm() {
   const [isLoading, setIsLoading] = useState(false);
+    
   const { onClose, boardId, columnId } = useCardModalStore();
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
@@ -89,7 +91,7 @@ export function NewCardForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-1 overflow-scroll h-[600px] scrollbar-thin scrollbar-thumb-neutral-900/30 scrollbar-track-transparent"
+        className="space-y-1 overflow-scroll px-2 h-[600px] scrollbar-thin scrollbar-thumb-neutral-900/30 scrollbar-track-transparent"
       >
         <FormField
           control={form.control}
@@ -124,6 +126,82 @@ export function NewCardForm() {
             </FormItem>
           )}
         />
+        <div className="flex flex-row gap-x-2">
+          <FormField
+            control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem className="space-y-1">
+                <FormControl>
+                  <StatusSelect
+                    defaultValue={field.value}
+                    onValueChange={field.onChange}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="tags"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <div className="space-y-1">
+                    <MultipleSelector
+                      {...field}
+                      options={query.data?.map((tag: any) => ({
+                        label: tag.name,
+                        value: tag.name,
+                      }))}
+                      disabled={false}
+                      onChange={(value: { label: string; value: string }[]) => {
+                        if (value.length <= 2) {
+                          setValue(
+                            "tags",
+                            value.map((tag: any) => tag.value),
+                            { shouldValidate: true }
+                          );
+                        } else {
+                          setValue(
+                            "tags",
+                            value.slice(0, 2).map((tag: any) => tag.value),
+                            { shouldValidate: true }
+                          );
+                        }
+                      }}
+                      value={tags.map((tag: any) => ({
+                        label: tag,
+                        value: tag,
+                      }))}
+                      placeholder="Select tags"
+                      loadingIndicator="Loading..."
+                      hideClearAllButton
+                      hidePlaceholderWhenSelected
+                    />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="dueDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <DatePicker value={field.value} onChange={field.onChange} />
+                </FormControl>
+                <FormDescription></FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         {/* <FormField
           control={form.control}
           name="image"
@@ -143,82 +221,7 @@ export function NewCardForm() {
             </FormItem>
           )}
         /> */}
-        <FormField
-          control={form.control}
-          name="status"
-          render={({ field }) => (
-            <FormItem className="space-y-3">
-              <FormLabel>Priority</FormLabel>
-              <FormControl>
-               <StatusSelect  defaultValue={field.value} onValueChange={field.onChange} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="flex  gap-x-2">
-          <FormField
-            control={form.control}
-            name="tags"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Tags</FormLabel>
-                <FormControl>
-                  {/* <MultipleSelector
-                    options={query.data?.map((tag: any) => ({
-                      label: tag.name,
-                      value: tag.name,
-                    }))}
-                    disabled={false}
-                    onChange={(value: { label: string; value: string }[]) => {
-                      if (value.length <= 2) {
-                        setValue(
-                          "tags",
-                          value.map((tag: any) => tag.value),
-                          { shouldValidate: true }
-                        );
-                      } else {
-                        setValue(
-                          "tags",
-                          value.slice(0, 2).map((tag: any) => tag.value),
-                          { shouldValidate: true }
-                        );
-                      }
-                    }}
-                    value={tags.map((tag: any) => ({
-                      label: tag,
-                      value: tag,
-                    }))}
-                    placeholder="eg-tech"
-                    loadingIndicator="Loading..."
-                    emptyIndicator="No tags selected"
-                  /> */}
-                  <TagSelect onChange={field.onChange} SelectedTags={tags} />
-                </FormControl>
-                <FormDescription>
-                  Tags are used to categorize your projects.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="dueDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Due Date</FormLabel>
-                <FormControl>
-                  <DatePicker value={field.value} onChange={field.onChange} />
-                </FormControl>
-                <FormDescription></FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="flex justify-end gap-x-1">
+        <div className="flex justify-end items-center p-1 gap-x-1 border-t border-border text-base">
           <Button type="submit">
             {isLoading ? (
               <>
