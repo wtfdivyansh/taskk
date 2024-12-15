@@ -30,6 +30,7 @@ import { Label } from "@/components/ui/label";
 import { ImageIcon } from "lucide-react";
 import { useTags } from "@/hooks/use-tags";
 import { useAssignee } from "@/hooks/use-assignee";
+import AssigneeSelect from "../assignee-select";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -195,6 +196,18 @@ export function NewCardForm() {
             />
             <FormField
               control={form.control}
+              name="assignee"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <AssigneeSelect data={assignee!} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="dueDate"
               render={({ field }) => (
                 <FormItem>
@@ -207,20 +220,20 @@ export function NewCardForm() {
             />
           </div>
           <FormField
-          control={form.control}
-          name="image"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl className="flex flex-col items-center justify-center">
-                <OurUploadDropzone
-                  onChange={field.onChange}
-                  value={field.value}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> 
+            control={form.control}
+            name="image"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl className="flex flex-col items-center justify-center">
+                  <OurUploadDropzone
+                    onChange={field.onChange}
+                    value={field.value}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
         <div className="flex justify-end items-center p-1 bg-neutral-900/30 shadow-sm  gap-x-1 border-t border-border text-base">
           <Button

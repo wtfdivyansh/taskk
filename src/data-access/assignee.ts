@@ -12,6 +12,16 @@ export const getAssignee = async (boardId:string) => {
     where: {
      boardId:boardId
     },
+    select:{
+      user:{
+        select:{
+          id:true,
+          name:true,
+          profileImage:true
+        }
+      }
+    }
   });
-  return users
+  const assignee = users.map((user)=>user.user)
+  return assignee
 };
