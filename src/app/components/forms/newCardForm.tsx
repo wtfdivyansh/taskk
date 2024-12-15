@@ -28,6 +28,8 @@ import StatusSelect from "../originui/status-component";
 import TagSelect from "../originui/multi-select";
 import { Label } from "@/components/ui/label";
 import { ImageIcon } from "lucide-react";
+import { useTags } from "@/hooks/use-tags";
+import { useAssignee } from "@/hooks/use-assignee";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -38,6 +40,7 @@ const formSchema = z.object({
   status: z.enum(["low", "medium", "high"]),
   tags: z.string().array().min(0),
   dueDate: z.date(),
+  assignee:z.string()
 });
 interface tags {
   label: string;
@@ -47,8 +50,12 @@ interface tags {
 
 export function NewCardForm() {
   const [isLoading, setIsLoading] = useState(false);
-    
   const { onClose, boardId, columnId } = useCardModalStore();
+  const { data, isLoading: isLoadingTags } = useTags();
+  const { data: assignee, isLoading: isLoadingAssignee } = useAssignee(
+    boardId
+  );
+
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
       title: "",
@@ -56,6 +63,7 @@ export function NewCardForm() {
       image: "",
       status: "low",
       tags: [],
+      assignee:"",
       dueDate: new Date(),
     },
     resolver: zodResolver(formSchema),
@@ -65,13 +73,7 @@ export function NewCardForm() {
   const status = watch("status");
   
 
-  const query = useQuery({
-    queryKey: ["tags"],
-    queryFn: async () => {
-      const res = await axios.get("/api/tags");
-      return res.data;
-    },
-  });
+
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
@@ -154,7 +156,7 @@ export function NewCardForm() {
                     <div className="space-y-1">
                       <MultipleSelector
                         {...field}
-                        options={query.data?.map((tag: any) => ({
+                        options={data?.map((tag: any) => ({
                           label: tag.name,
                           value: tag.name,
                         }))}
@@ -191,7 +193,6 @@ export function NewCardForm() {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="dueDate"
