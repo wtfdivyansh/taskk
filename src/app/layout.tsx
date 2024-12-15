@@ -5,7 +5,9 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "../providers/theme-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
-
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { extractRouterConfig } from "uploadthing/server";
+import { ourFileRouter } from "./api/uploadthing/core";
 
 const inter = DM_Sans({ subsets: ["latin"] });
 
@@ -23,21 +25,23 @@ export default function RootLayout({
   return (
     <ReactQueryProvider>
       <ClerkProvider>
-      <html lang="en">
-        <body className={inter.className}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            
-            {children}
-          </ThemeProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+        <html lang="en">
+          <NextSSRPlugin
+           
+            routerConfig={extractRouterConfig(ourFileRouter)}
+          />
+          <body className={inter.className}>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+          </body>
+        </html>
+      </ClerkProvider>
     </ReactQueryProvider>
-    
   );
 }

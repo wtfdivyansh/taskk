@@ -15,7 +15,8 @@ export default function OurUploadDropzone({value,onChange}:OurUploadDropzoneProp
           <div className=" relative h-40 w-40">
             <img src={value} className="w-40 h-40 rounded-lg" />
             <Button
-              onChange={() => onChange("")}
+            type="button"
+              onClick={() => onChange("")}
               className="absolute -top-3 -right-5 bg-transparent hover:bg-transparent"
             >
               <X className="bg-transparent hover:bg-rose-500 transition-colors rounded-full text-white " />

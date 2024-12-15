@@ -27,6 +27,7 @@ import OurUploadDropzone from "../Upload";
 import StatusSelect from "../originui/status-component";
 import TagSelect from "../originui/multi-select";
 import { Label } from "@/components/ui/label";
+import { ImageIcon } from "lucide-react";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -91,148 +92,157 @@ export function NewCardForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-1 overflow-scroll px-2 h-[600px] scrollbar-thin scrollbar-thumb-neutral-900/30 scrollbar-track-transparent"
+        className="overflow-scroll h-fit  scrollbar-thin scrollbar-thumb-neutral-900/30 scrollbar-track-transparent"
       >
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input
-                  placeholder="Task title"
-                  {...field}
-                  className="outline-none ring-0 focus-visible:ring-0 focus-visible:ring-neutral-900 focus:oultine-none focus:stroke-none border-none focus:border-none placeholder:text-neutral-500 placeholder:text-lg text-gray-400 text-lg"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Textarea
-                  placeholder="Task Description..."
-                  rows={5}
-                  {...field}
-                  className="outline-none ring-0 focus-visible:ring-0 focus-visible:ring-neutral-900 focus:oultine-none focus:stroke-none border-none focus:border-none placeholder:text-neutral-600 placeholder:text-lg [resize:none]"
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="flex flex-row gap-x-2">
+        <div className="px-2 flex flex-col gap-y-1 py-1">
           <FormField
             control={form.control}
-            name="status"
+            name="title"
             render={({ field }) => (
-              <FormItem className="space-y-1">
+              <FormItem>
                 <FormControl>
-                  <StatusSelect
-                    defaultValue={field.value}
-                    onValueChange={field.onChange}
+                  <Input
+                    placeholder="Task title"
+                    {...field}
+                    className="outline-none ring-0 focus-visible:ring-0 focus-visible:ring-neutral-900 focus:oultine-none focus:stroke-none border-none focus:border-none placeholder:text-neutral-500 placeholder:text-lg text-gray-300 text-lg"
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
-            name="tags"
+            name="description"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <div className="space-y-1">
-                    <MultipleSelector
-                      {...field}
-                      options={query.data?.map((tag: any) => ({
-                        label: tag.name,
-                        value: tag.name,
-                      }))}
-                      disabled={false}
-                      onChange={(value: { label: string; value: string }[]) => {
-                        if (value.length <= 2) {
-                          setValue(
-                            "tags",
-                            value.map((tag: any) => tag.value),
-                            { shouldValidate: true }
-                          );
-                        } else {
-                          setValue(
-                            "tags",
-                            value.slice(0, 2).map((tag: any) => tag.value),
-                            { shouldValidate: true }
-                          );
-                        }
-                      }}
-                      value={tags.map((tag: any) => ({
-                        label: tag,
-                        value: tag,
-                      }))}
-                      placeholder="Select tags"
-                      loadingIndicator="Loading..."
-                      hideClearAllButton
-                      hidePlaceholderWhenSelected
+                  <Textarea
+                    placeholder="Task Description..."
+                    rows={5}
+                    {...field}
+                    className="outline-none ring-0 focus-visible:ring-0 focus-visible:ring-neutral-900 focus:oultine-none focus:stroke-none border-none focus:border-none placeholder:text-neutral-600 placeholder:text-lg [resize:none] text-neutral-500 text-md"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="flex sm:flex-row gap-y-1 flex-wrap flex-1 gap-x-2">
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem className="space-y-1">
+                  <FormControl>
+                    <StatusSelect
+                      defaultValue={field.value}
+                      onValueChange={field.onChange}
                     />
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
+            <FormField
+              control={form.control}
+              name="tags"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <div className="space-y-1">
+                      <MultipleSelector
+                        {...field}
+                        options={query.data?.map((tag: any) => ({
+                          label: tag.name,
+                          value: tag.name,
+                        }))}
+                        disabled={false}
+                        onChange={(
+                          value: { label: string; value: string }[]
+                        ) => {
+                          if (value.length <= 2) {
+                            setValue(
+                              "tags",
+                              value.map((tag: any) => tag.value),
+                              { shouldValidate: true }
+                            );
+                          } else {
+                            setValue(
+                              "tags",
+                              value.slice(0, 2).map((tag: any) => tag.value),
+                              { shouldValidate: true }
+                            );
+                          }
+                        }}
+                        value={tags.map((tag: any) => ({
+                          label: tag,
+                          value: tag,
+                        }))}
+                        placeholder="Select tags"
+                        loadingIndicator="Loading..."
+                        hideClearAllButton
+                        hidePlaceholderWhenSelected
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="dueDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <DatePicker value={field.value} onChange={field.onChange} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <FormField
-            control={form.control}
-            name="dueDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <DatePicker value={field.value} onChange={field.onChange} />
-                </FormControl>
-                <FormDescription></FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        {/* <FormField
           control={form.control}
           name="image"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Image(optional)</FormLabel>
               <FormControl className="flex flex-col items-center justify-center">
                 <OurUploadDropzone
                   onChange={field.onChange}
                   value={field.value}
                 />
               </FormControl>
-              <FormDescription>
-                This is your project display name.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
-        /> */}
-        <div className="flex justify-end items-center p-1 gap-x-1 border-t border-border text-base">
-          <Button type="submit">
+        /> 
+        </div>
+        <div className="flex justify-end items-center p-1 bg-neutral-900/30 shadow-sm  gap-x-1 border-t border-border text-base">
+          <Button
+            type="submit"
+            className=" rounded-md bg-neutral-900 px-4 py-1 text-sm font-mono text-gray-300 shadow-[0_1px_0_0_theme(colors.white/10%)_inset,0_0_0_1px_theme(colors.white/5%)] outline-none focus-visible:outline-[1.5px] focus-visible:outline-offset-2 focus-visible:outline-blue-400 active:text-white/70 active:before:bg-black/10 hover:bg-neutral-800/20 hover:shadow-[0_1px_0_0_theme(colors.white/10%)_inset,0_0_0_1px_theme(colors.white/5%)]"
+          >
             {isLoading ? (
               <>
                 <Spinner />
                 Submitting...
               </>
             ) : (
-              "Submit"
+              "create"
             )}
           </Button>
-          <Button variant="destructive">Cancel</Button>
+          <Button
+            variant="destructive"
+            type="button"
+            className=" rounded-md bg-red-700 px-4 py-1 text-sm font-mono text-gray-300 shadow-[0_1px_0_0_theme(colors.white/10%)_inset,0_0_0_1px_theme(colors.white/5%)] outline-none focus-visible:outline-[1.5px] focus-visible:outline-offset-2 focus-visible:outline-blue-400 active:text-white/70 active:before:bg-black/10 hover:bg-red-800/80 hover:shadow-[0_1px_0_0_theme(colors.white/10%)_inset,0_0_0_1px_theme(colors.white/5%)]"
+            onClick={onClose}
+          >
+            Cancel
+          </Button>
         </div>
       </form>
     </Form>
