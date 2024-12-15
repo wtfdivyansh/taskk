@@ -10,22 +10,22 @@ import {
 } from "@/components/ui/select";
 import Image from "next/image";
 interface assigneeProps {
-    data:{id:string,name:string | null,profileImage:string | null}[]
+    data:{id:string,name:string | null,profileImage:string | null}[];
+    onChange:(value:string)=>void
 }
-export default function AssigneeSelect({ data }: assigneeProps) {
+export default function AssigneeSelect({ data,onChange }: assigneeProps) {
   return (
     <div className="space-y-2">
-      <Label htmlFor="select-38">Options with avatar</Label>
-      <Select defaultValue="s1">
+      <Select defaultValue="" onValueChange={onChange}>
         <SelectTrigger
           id="select-38"
-          className="ps-2 [&>span]:flex [&>span]:items-center [&>span]:gap-2 [&>span_img]:shrink-0"
+          className="ps-2 [&>span]:flex [&>span]:items-center [&>span]:gap-2 [&>span_img]:shrink-0 focus:visible:ring-0 focus:ring-0 text-neutral-400 "
         >
-          <SelectValue placeholder="Select framework" />
+          <SelectValue placeholder="Assign the task"  />
         </SelectTrigger>
-        <SelectContent className="[&_*[role=option]>span]:end-2 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:flex [&_*[role=option]>span]:items-center [&_*[role=option]>span]:gap-2 [&_*[role=option]]:pe-8 [&_*[role=option]]:ps-2">
+        <SelectContent className="[&_*[role=option]>span]:end-2 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:flex [&_*[role=option]>span]:items-center [&_*[role=option]>span]:gap-2 [&_*[role=option]]:pe-8 [&_*[role=option]]:ps-2 focus:visible:ring-0 focus:ring-0"
+        >
           <SelectGroup>
-            <SelectLabel className="ps-2">Assingee</SelectLabel>
            {data?.map((user) => (
             <SelectItem value={user.id}>
               <span className="flex items-center gap-2">

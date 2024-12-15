@@ -15,6 +15,7 @@ export const getColumns = async (boardId: string) => {
               tag: true,
             },
           },
+          assignee: true,
         },
       },
      },

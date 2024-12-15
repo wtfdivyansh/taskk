@@ -113,7 +113,7 @@ export default function SingleCard({task,index}:TaskProps) {
               <div className="flex flex-row items-center gap-x-2 w-full justify-between">
                 <div>
                   <Avatar className="h-6 w-6 ">
-                    <AvatarImage src="https://github.com/shadcn.png" />
+                    {task.assignee && <AvatarImage src={task.assignee.profileImage || "https://via.placeholder.com/150"} alt={task.assignee.id} className="h-6 w-6 rounded-full" />}
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                 </div>

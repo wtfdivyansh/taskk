@@ -1,3 +1,5 @@
+import { User } from "@prisma/client";
+
 export interface Tag {
   id: string;
   name: string;
@@ -23,6 +25,7 @@ export interface Todo {
   createdAt: Date;
   updatedAt: Date;
   tags: TodoTag[];
+  assignee: User | null
 }
 
 export interface Column {
@@ -78,6 +81,7 @@ export interface TaskColor {
   updatedAt: Date;
   tags: TodoTag[];
   color:string;
+  assignee:User | null
 }
 
 export interface UploadedFile{

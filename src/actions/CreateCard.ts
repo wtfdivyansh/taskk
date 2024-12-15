@@ -18,7 +18,7 @@ export const CreateCard = async (data: any,boardId:string,columnId:string) => {
     },
   });
 
-  const { title, description,  tags, dueDate, status,image } = data;
+  const { title, description,  tags, dueDate, status,image,assignee } = data;
   const position = lastCard ? lastCard.position + 1 : 1;
   const CardTags = await prisma.tags.findMany({
     where: {
@@ -40,8 +40,10 @@ export const CreateCard = async (data: any,boardId:string,columnId:string) => {
       tags: {
         create: CardTags.map((tag) => ({ tagId: tag.id })),
       },
+      assigneeId:assignee,
     },
   });
+  console.log(task);
   revalidatePath(`/tasks/${boardId}`);
   return task;
 };

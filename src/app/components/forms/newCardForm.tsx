@@ -79,6 +79,7 @@ export function NewCardForm() {
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     try {
+      console.log(data)
       await CreateCard(data, boardId, columnId);
     } catch (error) {
       console.log(error);
@@ -200,7 +201,7 @@ export function NewCardForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <AssigneeSelect data={assignee!} />
+                    <AssigneeSelect data={assignee!} onChange={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

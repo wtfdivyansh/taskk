@@ -37,6 +37,7 @@ export const useComments = (taskId:string)=>{
       console.log(res)
       return res
     },
+    refetchOnMount: false,
   });
   return {
     data,

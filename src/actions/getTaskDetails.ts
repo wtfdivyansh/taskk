@@ -20,6 +20,7 @@ export const getTaskDetails = async (boardId: string, search?: string) => {
               tag: true,
             },
           },
+          assignee: true,
         },
       },
     },
