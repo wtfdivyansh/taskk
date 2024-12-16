@@ -12,11 +12,12 @@ import Image from "next/image";
 interface assigneeProps {
     data:{id:string,name:string | null,profileImage:string | null}[];
     onChange:(value:string)=>void
+    defaultValue?:string
 }
-export default function AssigneeSelect({ data,onChange }: assigneeProps) {
+export default function AssigneeSelect({ data,onChange,defaultValue }: assigneeProps) {
   return (
     <div className="space-y-2">
-      <Select defaultValue="" onValueChange={onChange}>
+      <Select defaultValue={defaultValue ?? ""} onValueChange={onChange}>
         <SelectTrigger
           id="select-38"
           className="ps-2 [&>span]:flex [&>span]:items-center [&>span]:gap-2 [&>span_img]:shrink-0 focus:visible:ring-0 focus:ring-0 text-neutral-400 "

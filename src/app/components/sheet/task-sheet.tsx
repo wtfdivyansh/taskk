@@ -27,6 +27,10 @@ import CommentBox from "../comment/comment-box";
 import AttachmentBox from "../attachment/attachment-box";
 import { useState } from "react";
 import StatusSelect from "../originui/status-component";
+import { DatePicker } from "../DatePicker";
+import { useBoardParams } from "@/hooks/use-boardParams";
+import { useAssignee } from "@/hooks/use-assignee";
+import AssigneeSelect from "../assignee-select";
 
 type props ={
     children:React.ReactNode
@@ -34,6 +38,9 @@ type props ={
 }
 export const TaskSheet: React.FC<props> = ({ children, task }) => {
   const [canEdit, setCanEdit] = useState(false);
+  const boardId = useBoardParams();
+  const {data}=useAssignee(boardId.toString())
+
   return (
     <Sheet>
       <SheetTrigger>{children}</SheetTrigger>
@@ -54,10 +61,10 @@ export const TaskSheet: React.FC<props> = ({ children, task }) => {
             <Trash2 className="size-5 hover:text-red-300 text-neutral-600 cursor-pointer" />
           </div>
         </SheetHeader>
-        <div className="p-4 flex flex-col space-y-6 h-full ">
+        <div className="p-4 flex flex-col space-y-4 h-full ">
           <h1 className="text-2xl text-white">{task.title}</h1>
-          <div className="flex flex-col gap-y-6">
-            <div className=" flex flex-row w-full gap-x-1 item-center ">
+          <div className="flex flex-col gap-y-4">
+            <div className=" flex flex-row w-full gap-x-1 ">
               <Info className=" text-neutral-500  size-6"></Info>
               <p className="text-md text-neutral-500 text-justify w-24 ">
                 Priority{" "}
@@ -66,6 +73,7 @@ export const TaskSheet: React.FC<props> = ({ children, task }) => {
                 <StatusSelect
                   defaultValue={task.priority || "Low"}
                   onValueChange={() => {}}
+                 
                 />
               ) : (
                 <Badge
@@ -90,11 +98,12 @@ export const TaskSheet: React.FC<props> = ({ children, task }) => {
                 Due date
               </p>
               <div className="flex items-center">
-                {task.dueDate && (
+                {/* {task.dueDate && (
                   <p className="text-sm text-neutral-300">
                     {format(task?.dueDate, "dd MMMM yyyy")}
                   </p>
-                )}
+                )} */}
+                {canEdit && <DatePicker value={task.dueDate} />}
               </div>
             </div>
             <div className=" flex flex-row w-full gap-x-1 item-center ">
@@ -102,7 +111,7 @@ export const TaskSheet: React.FC<props> = ({ children, task }) => {
               <p className="text-md text-neutral-500 text-justify w-24 ">
                 Assignee{" "}
               </p>
-              {task.assignee && (
+              {/* {task.assignee && (
                 <div className="flex flex-row gap-x-2 text-neutral-300">
                   <Avatar className="h-6 w-6 ">
                     <AvatarImage
@@ -118,7 +127,9 @@ export const TaskSheet: React.FC<props> = ({ children, task }) => {
                   </Avatar>
                   <p>{task.assignee.name}</p>
                 </div>
-              )}
+              )} */}
+              {canEdit && <AssigneeSelect data={data || []} defaultValue={task.assignee?.id} onChange={()=>{}}/>}
+            
             </div>
             <div className=" flex flex-row w-full gap-x-1 item-center ">
               <Tags className=" text-neutral-500  size-6"></Tags>
@@ -214,4 +225,5 @@ export const TaskSheet: React.FC<props> = ({ children, task }) => {
         </div>
       </SheetContent>
     </Sheet>
-  );}
+  );
+}

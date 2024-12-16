@@ -9,6 +9,7 @@ export const useAssignee = (boardId:string) => {
       const assignee = await getAssignee(boardId)
       return assignee;
     },
+    refetchOnMount:false
   });
 
   return {data,isLoading}
