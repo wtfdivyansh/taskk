@@ -20,7 +20,7 @@ import {
 import { Task, TaskProps } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { BookDashed, CalendarCheckIcon, CalendarRange, Delete, DeleteIcon, Edit, Info, NotepadText, Tags, Trash, Trash2, User2, X } from "lucide-react";
+import { BookDashed, CalendarCheckIcon, CalendarRange, Delete, DeleteIcon, Edit, Info, NotepadText, PlusIcon, Tags, Trash, Trash2, User2, X } from "lucide-react";
 import { RxDotsVertical } from "react-icons/rx";
 import CommentButton from "../comment/comment-button";
 import CommentBox from "../comment/comment-box";
@@ -31,12 +31,16 @@ import { DatePicker } from "../DatePicker";
 import { useBoardParams } from "@/hooks/use-boardParams";
 import { useAssignee } from "@/hooks/use-assignee";
 import AssigneeSelect from "../assignee-select";
+import { Textarea } from "@/components/ui/textarea";
+import { Form } from "@/components/ui/form";
+import { EditTask } from "../forms/editTask";
 
 type props ={
     children:React.ReactNode
     task: Task
 }
 export const TaskSheet: React.FC<props> = ({ children, task }) => {
+  const [taskData, settaskData] = useState<any>({});
   const [canEdit, setCanEdit] = useState(false);
   const boardId = useBoardParams();
   const {data}=useAssignee(boardId.toString())
@@ -61,128 +65,8 @@ export const TaskSheet: React.FC<props> = ({ children, task }) => {
             <Trash2 className="size-5 hover:text-red-300 text-neutral-600 cursor-pointer" />
           </div>
         </SheetHeader>
-        <div className="p-4 flex flex-col space-y-4 h-full ">
-          <h1 className="text-2xl text-white">{task.title}</h1>
-          <div className="flex flex-col gap-y-4">
-            <div className=" flex flex-row w-full gap-x-1 ">
-              <Info className=" text-neutral-500  size-6"></Info>
-              <p className="text-md text-neutral-500 text-justify w-24 ">
-                Priority{" "}
-              </p>
-              {canEdit ? (
-                <StatusSelect
-                  defaultValue={task.priority || "Low"}
-                  onValueChange={() => {}}
-                 
-                />
-              ) : (
-                <Badge
-                  className={cn(
-                    "text-xs  bg-sky-500/40 text-sky-500 ring-1/[0.5] ring-white ",
-                    {
-                      "bg-emerald-500/40 text-emerald-500":
-                        task.priority === "high",
-                      "bg-red-500/40 text-red-500": task.priority === "low",
-                      "bg-sky-500/40 text-sky-500": task.priority === "medium",
-                    }
-                  )}
-                >
-                  {" "}
-                  {task.priority}
-                </Badge>
-              )}
-            </div>
-            <div className=" flex flex-row w-full gap-x-1 item-center ">
-              <CalendarCheckIcon className=" text-neutral-500  size-6"></CalendarCheckIcon>
-              <p className="text-md text-neutral-500 text-justify w-24">
-                Due date
-              </p>
-              <div className="flex items-center">
-                {/* {task.dueDate && (
-                  <p className="text-sm text-neutral-300">
-                    {format(task?.dueDate, "dd MMMM yyyy")}
-                  </p>
-                )} */}
-                {canEdit && <DatePicker value={task.dueDate} />}
-              </div>
-            </div>
-            <div className=" flex flex-row w-full gap-x-1 item-center ">
-              <User2 className=" text-neutral-500  size-6"></User2>
-              <p className="text-md text-neutral-500 text-justify w-24 ">
-                Assignee{" "}
-              </p>
-              {/* {task.assignee && (
-                <div className="flex flex-row gap-x-2 text-neutral-300">
-                  <Avatar className="h-6 w-6 ">
-                    <AvatarImage
-                      src={
-                        task.assignee.profileImage ||
-                        "https://via.placeholder.com/150"
-                      }
-                      alt={task.assignee.id}
-                      className="h-6 w-6 rounded-full"
-                    />
-
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  <p>{task.assignee.name}</p>
-                </div>
-              )} */}
-              {canEdit && <AssigneeSelect data={data || []} defaultValue={task.assignee?.id} onChange={()=>{}}/>}
-            
-            </div>
-            <div className=" flex flex-row w-full gap-x-1 item-center ">
-              <Tags className=" text-neutral-500  size-6"></Tags>
-              <p className="text-md text-neutral-500 text-justify w-24 ">
-                Tags{" "}
-              </p>
-              <div className="flex flex-row gap-x-1">
-                {task.tags.map((t, index) => (
-                  <Badge
-                    key={index}
-                    className={cn(
-                      "text-xs text-neutral-300 w-fit h-fit px-1 ",
-                      t.tag.color
-                    )}
-                  >
-                    {t.tag.name}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-            {task.content ? (
-              <div className=" flex flex-col w-full gap-y-2 item-center ">
-                <div className="flex flex-row gap-x-1 ">
-                  <NotepadText className=" text-neutral-500  size-6"></NotepadText>
-                  <p className="text-md text-neutral-500 text-justify ">
-                    Description{" "}
-                  </p>
-                </div>
-                {task.content && (
-                  <div className="w-full border border-neutral-700/[0.2] bg-neutral-900/70 rounded-md p-2 flex flex-row items-start max-h-16 h-16 ">
-                    <p className="text-neutral-500 text-sm text-wrap">
-                      {task.content}
-                    </p>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className=" flex flex-col w-full gap-y-2 item-center ">
-                <div className="flex flex-row gap-x-1 ">
-                  <NotepadText className=" text-neutral-500  size-6"></NotepadText>
-                  <p className="text-md text-neutral-500 text-justify ">
-                    Description{" "}
-                  </p>
-                </div>
-
-                <div className="w-full border border-neutral-700/[0.2] bg-neutral-900/70 rounded-md p-2 flex flex-row items-start max-h-16 h-16 ">
-                  <p className="text-neutral-600 text-sm text-wrap">
-                    Add a description to your task
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
+        <div className="px-4  flex flex-col  h-full ">
+         <EditTask task={task}/>
           <Tabs defaultValue="Subtasks" className="w-full h-full">
             <TabsList className="grid grid-cols-3 gap-x-2 items-start justify-around bg-transparent">
               <TabsTrigger
