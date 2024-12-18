@@ -34,8 +34,8 @@ interface tags {
 export function NewCardForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { onClose, boardId, columnId } = useCardModalStore();
-  const { data, isLoading: isLoadingTags } = useTags();
-  const { data: assignee, isLoading: isLoadingAssignee } = useAssignee(
+  const { data } = useTags();
+  const { data: assignee } = useAssignee(
     boardId
   );
 
@@ -66,9 +66,7 @@ export function NewCardForm() {
       onClose();
     }
   };
-  useEffect(()=>{
-    console.log(tags)
-  },[tags])
+
 
   return (
     <Form {...form}>

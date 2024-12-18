@@ -6,6 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { PriorityEnum } from "@/lib/types";
 
 function StatusDot({ className }: { className?: string }) {
   return (
@@ -26,13 +27,15 @@ function StatusDot({ className }: { className?: string }) {
 export default function StatusSelect({
   onValueChange,
   defaultValue,
+  disabled
 }: {
   onValueChange: () => void;
-  defaultValue: string;
+  defaultValue: PriorityEnum;
+  disabled? :boolean
 }) {
   return (
     <div className="space-y-2">
-      <Select defaultValue={defaultValue} onValueChange={onValueChange}>
+      <Select value={defaultValue} onValueChange={onValueChange} disabled={disabled} >
         <SelectTrigger
           id="select-32"
           className="[&>span]:flex [&>span]:items-center [&>span]:gap-2 [&>span_svg]:shrink-0 focus:visible:ring-0 focus:ring-0"
