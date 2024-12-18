@@ -11,33 +11,6 @@ import { Draggable } from "@hello-pangea/dnd";
 import Link from "next/link";
 import { TaskSheet } from "./sheet/task-sheet";
 
-interface SingleCardProps {
-  task: {
-    tags: ({
-      tag: {
-        id: string;
-        name: string;
-        userId: string;
-        color: string | null;
-      };
-    } & {
-      taskId: string;
-      tagId: string;
-    })[];
-  } & {
-    id: string;
-    title: string;
-    content: string | null;
-    position: number;
-    priority: string | null;
-    dueDate: Date | null;
-    image: string | null;
-    columnId: string;
-    createdAt: Date;
-    updatedAt: Date;
-  };
-  index:number;
-}
 export default function SingleCard({task,index}:TaskProps) {
   return (
     <Draggable draggableId={task.id} index={index} >

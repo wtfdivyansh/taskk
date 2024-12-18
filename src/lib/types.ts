@@ -99,3 +99,8 @@ export enum PriorityEnum  {
   MEDIUM= "medium",
   HIGH= "high",
 };
+
+export enum ROLE {
+  ADMIN = "admin",
+  USER = "user",
+}

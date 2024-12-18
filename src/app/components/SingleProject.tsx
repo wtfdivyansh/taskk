@@ -56,7 +56,7 @@ export function SingleProject({project}: SingleProjectProps) {
                     50% completed
                 </span>
                 <span className="flex flex-row text-sm gap-x-1 text-neutral-300">
-                    <Calendar className="w-4 h-4 text-neutral-600"/>{format(new Date(project?.dueDate), "MMM dd")}
+                    <Calendar className="w-4 h-4 text-neutral-600"/>{format(new Date(project?.targetDate), "MMM dd")}
                 </span>
             </div>
 

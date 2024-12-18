@@ -28,18 +28,7 @@ import { Spinner } from "../Spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-
-
-const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  description:z.optional(z.string().min(0)),
-  priority:z.enum(["low","medium","high"]),
-  tags:z.string().array().min(0),
-  dueDate:z.date(),
-  status:z.string()
-});
+import { createProjectSchema } from "@/lib/schema";
 interface tags {
     label:string;
     value:string;
@@ -47,17 +36,17 @@ interface tags {
 
 export function ProjectForm() {
   const {onClose} = useModalStore()
-   const form = useForm<z.infer<typeof formSchema>>({
-    defaultValues:{
-        name: "",
-        description: "",
-        priority: "low",
-        tags: [],
-        dueDate: new Date(),
-        status: "ongoing"
-    },
-    resolver: zodResolver(formSchema),
-  });
+   const form = useForm<z.infer<typeof createProjectSchema>>({
+     defaultValues: {
+       name: "",
+       description: "",
+       priority: "low",
+       tags: [],
+       targetDate: new Date(),
+       status: "ongoing",
+     },
+     resolver: zodResolver(createProjectSchema),
+   });
   const {watch,setValue}= form
   const tags = watch("tags")
   const status = watch("status")
@@ -78,8 +67,8 @@ export function ProjectForm() {
      onClose();
     },
   })
-    const onSubmit = (data: z.infer<typeof formSchema>) => {
-      mutate(data)
+    const onSubmit = (data: z.infer<typeof createProjectSchema>) => {
+      mutate(data);
     };
 
 
@@ -198,7 +187,7 @@ export function ProjectForm() {
         <div className="flex  gap-x-2">
           <FormField
             control={form.control}
-            name="dueDate"
+            name="targetDate"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Due Date</FormLabel>
@@ -212,7 +201,7 @@ export function ProjectForm() {
           />
           <FormField
             control={form.control}
-            name="dueDate"
+            name="status"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Status</FormLabel>

@@ -15,7 +15,7 @@ export async function GetProjectInfo(ProjectId:string) {
       name: true,
       status: true,
       priority: true,
-      dueDate: true,
+      targetDate: true,
       description: true,
       isPersonal: true,
       boardMembers: {

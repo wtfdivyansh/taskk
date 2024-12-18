@@ -1,17 +1,27 @@
 "use server";
 
 import prisma from "@/lib/db";
+import { createProjectSchema } from "@/lib/schema";
 import { currentUser } from "@clerk/nextjs/server";
 import { revalidatePath, revalidateTag } from "next/cache";
-import { unstable_cache as cache } from "next/cache";
 
+import z from "zod";
 import { v4 as uuidv4 } from 'uuid';
+import { ROLE } from "@/lib/types";
 
-export const CreateProject = async( { name, dueDate, status, tags, description, priority }: any) => {
+export const CreateProject = async(data: z.infer<typeof createProjectSchema>) => {
     const user = await currentUser();
     if (!user) {
         throw new Error("User not found");
     }
+    const {
+        name,
+        description,
+        priority,
+        tags,
+      targetDate,
+        status,
+    } = data;
    const projectTags = await prisma.tags.findMany({
     where: {
       name: {
@@ -22,7 +32,7 @@ export const CreateProject = async( { name, dueDate, status, tags, description, 
     const project = await prisma.board.create({
       data: {
         name,
-        dueDate,
+        targetDate,
         status,
         userId: user.id,
         description: description,
@@ -34,12 +44,12 @@ export const CreateProject = async( { name, dueDate, status, tags, description, 
         boardMembers:{
           create: {
             userId: user.id,
-            role: "owner",
+            role:  ROLE.ADMIN,
           }
         }
       },
     });
-      revalidateTag(`projects-${user.id}`);
+    revalidateTag(`projects-${user.id}`);
 
     return project;
 };
