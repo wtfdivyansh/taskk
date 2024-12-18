@@ -53,7 +53,7 @@ export function EditTask({ task }: editTaskProps) {
    status: task.priority as PriorityEnum, 
    tags: [],
    dueDate: task.dueDate,
-   assignee: task.assignee.id ,
+   assigneeId: task.assignee.id ,
  };
   const form = useForm<z.infer<typeof updateTaskSchema>>({
     defaultValues: initialValues,
@@ -75,7 +75,6 @@ const handleSubmit = async (data: z.infer<typeof updateTaskSchema>) => {
         : data[key];
     }
   }
-  console.log("after", data);
 };
 useEffect(()=>{
    if (canEdit ===false) {
@@ -172,7 +171,7 @@ useEffect(()=>{
               />
               <FormField
                 control={form.control}
-                name="assignee"
+                name="assigneeId"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
