@@ -69,10 +69,10 @@ export interface TaskColor {
  export interface Task {
   id: string;
   title: string;
-  content: string | null;
+  description: string | null;
   position: number;
-  priority: string | null;
-  dueDate: Date | null;
+  priority: string;
+  dueDate: Date ;
   startTime: Date | null;
   endTime: Date | null;
   image: string | null;
@@ -81,7 +81,7 @@ export interface TaskColor {
   updatedAt: Date;
   tags: TodoTag[];
   color:string;
-  assignee:User | null
+  assignee:User; 
 }
 
 export interface UploadedFile{

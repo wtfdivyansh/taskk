@@ -23,7 +23,7 @@ import StatusSelect from "../originui/status-component";
 import { DatePicker } from "../DatePicker";
 import AssigneeSelect from "../assignee-select";
 import { Textarea } from "@/components/ui/textarea";
-import { Task } from "@/lib/types";
+import { PriorityEnum, Task } from "@/lib/types";
 import { useAssignee } from "@/hooks/use-assignee";
 import { useBoardParams } from "@/hooks/use-boardParams";
 import { useState } from "react";
@@ -32,48 +32,44 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { Button } from "@/components/ui/button";
+import { updateTaskSchema } from "@/lib/schema";
 interface editTaskProps {
   task: Task;
 }
-const formSchema = z.object({
-  title: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  description: z.optional(z.string().min(0)),
-  status: z.enum(["low", "medium", "high"]),
-  tags: z.string().array().min(0),
-  dueDate: z.date(),
-  assignee: z.string(),
-});
+
 export function EditTask({ task }: editTaskProps) {
 
   const boardId = useBoardParams();
   const { data } = useAssignee(boardId.toString())
  const initialValues = {
    title: task.title,
-   description: task.content ?? "",
-   status: "low" as const, 
+   description: task.description ?? "",
+   status: task.priority as PriorityEnum, 
    tags: [],
-   dueDate: task.dueDate ?? new Date(),
+   dueDate: task.dueDate,
    assignee: task.assignee?.id ?? "",
  };
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<z.infer<typeof updateTaskSchema>>({
     defaultValues: initialValues,
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(updateTaskSchema),
   });
-const handleSubmit = async (data: z.infer<typeof formSchema>) => {
+const handleSubmit = async (data: z.infer<typeof updateTaskSchema>) => {
   for (const key in data) {
     if ((data as any)[key] == (initialValues as any)[key]) {
-        delete (data as any)[key];
+      delete (data as any)[key];
     }
     if (key == "dueDate") {
-      data[key].toISOString() === initialValues[key].toISOString() ? delete  (data as any)[key] : data[key];
+      data[key].toISOString() === initialValues[key].toISOString()
+        ? delete (data as any)[key]
+        : data[key];
     }
     if (key == "tags") {
-        data[key].length === initialValues[key].length ? delete  (data as any)[key] : data[key];
+      data[key].length === initialValues[key].length
+        ? delete (data as any)[key]
+        : data[key];
     }
   }
-  console.log("after",data);
+  console.log("after", data);
 };
   return (
     <Form {...form}>
