@@ -93,3 +93,9 @@ export interface UploadedFile{
   createdAt: Date;
   updatedAt: Date;
 }
+
+export enum PriorityEnum  {
+  LOW= "low",
+  MEDIUM= "medium",
+  HIGH= "high",
+};

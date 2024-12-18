@@ -37,9 +37,9 @@ model Board {
   thumbnail     String?
   user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String
-  dueDate       DateTime
+  targetDate       DateTime
   description   String?
-  status        String         @default("In Progress")
+  status        String         @default("todo")
   columns       Column[]
   priority      String         @default("Low")
   isPersonal    Boolean        @default(false)
@@ -50,7 +50,6 @@ model Board {
   updatedAt     DateTime       @updatedAt
   pinnedBoards  UserPinnedBoard[]
   inviteCode    String         @unique
-  
 }
 
 model Column {
@@ -68,18 +67,18 @@ model Column {
 model Task {
   id        String   @id @default(uuid())
   title     String
-  content   String?
+  description   String?
   position  Int
-  priority  String?
-  dueDate   DateTime?
+  priority  Priority @default(low)
+  dueDate   DateTime
   startTime DateTime?
   endTime   DateTime?
   image     String?
   isCompleted Boolean @default(false)
-  assignee    User?      @relation("AssignedTo", fields: [assigneeId], references: [id], onDelete: Cascade)
-  assigneeId  String?
-  createdBy   User?       @relation("CreatedBy", fields: [createdById], references: [id] , onDelete: Cascade)
-  createdById String?
+  assignee    User     @relation("AssignedTo", fields: [assigneeId], references: [id], onDelete: Cascade)
+  assigneeId  String
+  createdBy   User      @relation("CreatedBy", fields: [createdById], references: [id] , onDelete: Cascade)
+  createdById String
   column    Column   @relation(fields: [columnId], references: [id])
   columnId  String
   tags      TaskTags[]
@@ -89,7 +88,11 @@ model Task {
   comments  Comment[]
   attachments Attachment[]
 }
-
+enum Priority {
+  low
+  medium
+  high
+}
 model Tags {
   id      String    @id @default(uuid())
   name    String
@@ -106,11 +109,14 @@ model BoardMember {
   boardId   String
   user      User     @relation(fields: [userId], references: [id],onDelete: Cascade)
   userId    String
-  role      String?   
+  role      Role  @default(member)  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
+enum Role {
+  admin 
+  member
+}
 model Notification {
   id        String   @id @default(uuid())
   type      String

@@ -2,47 +2,29 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
-  FormField,
   FormItem,
-  FormLabel,
+  FormField,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import MultipleSelector, { Option } from "@/components/ui/multiselect";
 import { useEffect, useState } from "react";
 import { DatePicker } from "../DatePicker";
-import { cateogaryModalStore, useCardModalStore } from "@/hooks/use-modal-store";
+import { useCardModalStore } from "@/hooks/use-modal-store";
 import { Spinner } from "../Spinner";
 import { Textarea } from "@/components/ui/textarea";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { CreateCard } from "@/actions/CreateCard";
 import OurUploadDropzone from "../Upload";
 import StatusSelect from "../originui/status-component";
-import TagSelect from "../originui/multi-select";
-import { Label } from "@/components/ui/label";
-import { ImageIcon } from "lucide-react";
 import { useTags } from "@/hooks/use-tags";
 import { useAssignee } from "@/hooks/use-assignee";
 import AssigneeSelect from "../assignee-select";
-
-const formSchema = z.object({
-  title: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  description: z.optional(z.string().min(0)),
-  image: z.string().optional(),
-  status: z.enum(["low", "medium", "high"]),
-  tags: z.string().array().min(0),
-  dueDate: z.date(),
-  assignee:z.string()
-});
+import { createTaskSchema } from "@/lib/schema";
+import { PriorityEnum } from "@/lib/types";
 interface tags {
   label: string;
   value: string;
@@ -57,29 +39,25 @@ export function NewCardForm() {
     boardId
   );
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<z.infer<typeof createTaskSchema>>({
     defaultValues: {
       title: "",
       description: "",
       image: "",
-      status: "low",
+      status: PriorityEnum.LOW,
       tags: [],
-      assignee:"",
+      assignee: "",
       dueDate: new Date(),
     },
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createTaskSchema),
   });
   const { watch, setValue } = form;
   const tags = watch("tags");
-  const status = watch("status");
-  
 
-
-
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+  const onSubmit = async (data: z.infer<typeof createTaskSchema>) => {
     setIsLoading(true);
     try {
-      console.log(data)
+      console.log(data);
       await CreateCard(data, boardId, columnId);
     } catch (error) {
       console.log(error);

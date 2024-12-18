@@ -1,9 +1,11 @@
 "use server"
 import prisma from "@/lib/db";
+import { createTaskSchema} from "@/lib/schema";
 import { currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
-export const CreateCard = async (data: any,boardId:string,columnId:string) => {
+export const CreateCard = async (data:z.infer<typeof createTaskSchema>,boardId:string,columnId:string) => {
   const user = await currentUser();
   console.log(columnId);
   if (!user) {
@@ -31,7 +33,7 @@ export const CreateCard = async (data: any,boardId:string,columnId:string) => {
   const task = await prisma.task.create({
     data: {
       title: title,
-      content: description,
+      description: description,
       position: position,
       priority: status,
       dueDate: dueDate,
@@ -41,6 +43,7 @@ export const CreateCard = async (data: any,boardId:string,columnId:string) => {
         create: CardTags.map((tag) => ({ tagId: tag.id })),
       },
       assigneeId:assignee,
+      createdById: user.id,
     },
   });
   console.log(task);
