@@ -6,14 +6,13 @@ import {
 } from "@/components/ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ChevronDown, LogOut, User } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 import { SignOutButton } from "@clerk/nextjs";
 import SidebarList from "./sidebarList";
 
 export default async function Sidebar() {
   const user = await currentUser()
   return (
-    <div className="h-screen w-72 bg-neutral-950 flex flex-col gap-x-2 gap-y-2">
+    <div className="h-full w-72 bg-neutral-950 flex flex-col gap-x-2 gap-y-2">
       <div className="flex flex-row items-start justity-start mx-2  mt-6  px-6 ">
         <div className="flex flex-row items-center space-x-1 w-8 h-8 px-2 py-2 bg-neutral-950 shadow-[0_1px_0_0_theme(colors.white/17%)_inset,0_0_0_1px_theme(colors.white/5%)] rounded-md">
           <svg

@@ -16,16 +16,16 @@ export interface TodoTag {
 export interface Todo {
   id: string;
   title: string;
-  content: string | null;
+  description: string | null;
   position: number;
-  priority: string | null;
-  dueDate: Date | null;
+  priority: "low"|"medium"|"high";
+  dueDate: Date 
   image: string | null;
   columnId: string;
   createdAt: Date;
   updatedAt: Date;
   tags: TodoTag[];
-  assignee: User | null
+  assignee: User;
 }
 
 export interface Column {

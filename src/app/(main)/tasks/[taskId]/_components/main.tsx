@@ -1,3 +1,4 @@
+"use client"
 import { TaskColor, Todo } from "@/lib/types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LuBarChartBig } from "react-icons/lu";
@@ -9,10 +10,13 @@ import Boards from "@/app/components/Boards";
 import TableList from "@/app/components/TableList";
 import Calender from "@/app/components/Calender";
 import { getTaskDetails } from "@/actions/getTaskDetails";
+import { useGetTasks } from "@/hooks/use-get-tasks";
+import { useSearchParams } from "next/navigation";
+import Loading from "../../loading";
 
 
-export default async function Main({ boardId}: { boardId: string }) {
-  const columns = await getTaskDetails(boardId);
+export default  function Main({ boardId}: { boardId: string }) {
+  const { data:columns =[], isLoading } = useGetTasks(boardId);
     const tasks: TaskColor[] = columns
       .map((column) => {
         const color = column.color;
@@ -47,6 +51,12 @@ export default async function Main({ boardId}: { boardId: string }) {
             <AddColumn boardId={boardId} />
           </div>
         </div>
+        {isLoading && (
+        <div className="flex flex-col items-center justify-start w-full ">
+          <Loading />
+        </div>
+        )}
+        <>
         <TabsContent value="board" className="mx-2">
           <Boards columns={columns} boardId={boardId} />
         </TabsContent>
@@ -56,7 +66,9 @@ export default async function Main({ boardId}: { boardId: string }) {
         <TabsContent value="calendar" className="w-full  px-1">
           <Calender tasks={tasks} />
         </TabsContent>
+        </>
       </Tabs>
+      
     </div>
   );
 }

@@ -11,9 +11,6 @@ import Main from "./_components/main";
 import AddMember from "./_components/addMember";
 import { currentUser } from "@clerk/nextjs/server";
 import { GetProjectInfo } from "@/actions/GetProjectInfo";
-import { Suspense } from "react";
-import Loading from "../loading";
-
 
 export default async function TaskPage({
   params,
@@ -27,7 +24,7 @@ export default async function TaskPage({
     return <div>Task not found</div>;
   }
   return (
-    <div className="border-l-[1px] border-t-[1px] pb-20 h-screen rounded-l-3xl backdrop-blur-sm border-muted-foreground/20 overflow-scroll mt-2 bg-[#0F1011]">
+    <div className="border-l-[1px] border-t-[1px] pb-20 h-full rounded-l-3xl backdrop-blur-sm border-muted-foreground/20  mt-2 bg-[#0F1011] rounded-lg">
       <div>
         <div className="flex flex-col gap-1 relative bg-[#0F1011]">
           <ProjectHeader name={task.name} />
@@ -120,9 +117,7 @@ export default async function TaskPage({
               ))}
             </div>
           </div>
-          <Suspense fallback={<Loading />}>
             <Main boardId={task.id} />
-          </Suspense>
         </div>
       </div>
     </div>

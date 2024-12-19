@@ -1,12 +1,29 @@
+"use server";
 import prisma from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 
-
-export const getTaskDetails = async (boardId: string, search?: string) => {
+export const getTaskDetails = async (boardId: string, search: string | null) => {
   const user = await currentUser();
   if (!user) {
     throw new Error("User not found");
   }
+
+
+  if (!boardId || typeof boardId !== "string" || boardId.trim() === "") {
+    throw new Error("Invalid board ID");
+  }
+
+
+  const existingColumns = await prisma.column.findMany({
+    where: {
+      boardId: boardId,
+    },
+  });
+
+  if (existingColumns.length === 0) {
+    return []
+  }
+
 
   const baseQuery = {
     where: {
@@ -26,8 +43,9 @@ export const getTaskDetails = async (boardId: string, search?: string) => {
     },
   };
 
+
   if (search && search.trim() !== "") {
-    const columns = await prisma.column.findMany({
+    const columnsWithSearch = await prisma.column.findMany({
       ...baseQuery,
       include: {
         ...baseQuery.include,
@@ -43,12 +61,20 @@ export const getTaskDetails = async (boardId: string, search?: string) => {
       },
     });
 
-    if (!columns || columns.every((column) => column.todos.length === 0)) {
-      // If no todos found with search, return all columns with their original todos
+    if (
+      !columnsWithSearch ||
+      columnsWithSearch.every((column) => column.todos.length === 0)
+    ) {
       return await prisma.column.findMany(baseQuery);
     }
-    return columns;
-  } else {
-    return await prisma.column.findMany(baseQuery);
+
+    return columnsWithSearch;
   }
+
+  const columns = await prisma.column.findMany(baseQuery);
+  if (!columns) {
+    throw new Error("Unexpected error: No data found");
+  }
+
+  return columns;
 };

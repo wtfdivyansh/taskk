@@ -15,9 +15,6 @@ export default function SearchBar() {
       return () => clearTimeout(timer);
     }
     debounce()
-    
-    
-    
   }, [search]);
     return (
       <div className="relative flex items-center  max-w-2xl">

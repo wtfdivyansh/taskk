@@ -8,7 +8,7 @@ export function ProjectHeader({name}: {name: string}) {
     const [starred, setStarred] = useState(false)
     const pathname = usePathname()
   return (
-    <div className="flex flex-col gap-y-2 mt-4">
+    <div className="flex flex-col gap-y-2 ">
       <div className="text-4xl sticky top-0 z-[10] p-4 bg-background/50 backdrop-blur-lg flex  border-b bg-[#0F1011] items-center justify-between">
         <div className="flex flex-row items-center">
           <ChevronLeft

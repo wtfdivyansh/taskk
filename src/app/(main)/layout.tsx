@@ -14,9 +14,9 @@ export default function DashboardLayout({
   return (
     <ModalProvider>
       <Toaster />
-      <div className="w-full h-full flex">
+      <div className="h-full flex">
         <Sidebar />
-        <div className="w-[80%] justify-end ">{children}</div>
+        <div className=" justify-end ">{children}</div>
       </div>
       
     </ModalProvider>
