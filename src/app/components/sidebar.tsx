@@ -1,24 +1,26 @@
-import { currentUser } from "@clerk/nextjs/server";
+"use client";
+import Link from "next/link";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ChevronDown, LogOut, User } from "lucide-react";
-import { SignOutButton } from "@clerk/nextjs";
-import SidebarList from "./sidebarList";
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { sidebarList } from "@/lib/constant";
+import { usePathname } from "next/navigation";
+import clsx from "clsx";
 
-export default async function Sidebar() {
-  const user = await currentUser()
+export default  function Sidebar() {
+  const pathname = usePathname()
+
   return (
-    <div className="h-full w-72 bg-neutral-950 flex flex-col gap-x-2 gap-y-2">
-      <div className="flex flex-row items-start justity-start mx-2  mt-6  px-6 ">
-        <div className="flex flex-row items-center space-x-1 w-8 h-8 px-2 py-2 bg-neutral-950 shadow-[0_1px_0_0_theme(colors.white/17%)_inset,0_0_0_1px_theme(colors.white/5%)] rounded-md">
+    <nav className=" dark:bg-black h-screen overflow-scroll  justify-between w-[274px] flex items-center flex-col  gap-6 py-6 px-2">
+      <div className="flex   flex-col w-full gap-y-4 ">
+        <Link className="flex font-bold flex-row gap-x-1 " href="/">
           <svg
             fill="#ffffff"
-            height="800px"
-            width="800px"
+            height="20px"
+            width="20px"
             version="1.1"
             id="Layer_1"
             xmlns="http://www.w3.org/2000/svg"
@@ -41,55 +43,42 @@ export default async function Sidebar() {
               </g>
             </g>
           </svg>
-        </div>
-        <span className="font-bold text-lg  px-2   bg-clip-text text-transparent bg-gradient-to-b from-neutral-200 to-neutral-600   ">
-          SaveBox
-        </span>
+          <span>Savebox</span>
+        </Link>
+        <TooltipProvider>
+          {sidebarList.map((menuItem) => (
+            <ul key={menuItem.name} className="flex flex-col gap-y-1 items-start ps-8">
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger>
+                  <li>
+                    <Link
+                      href={menuItem.href}
+                      className={clsx(
+                        "group h-6 flex items-center justify-center  scale-[1.5] rounded-lg px-4  cursor-pointer",
+                        {
+                          "bg-neutral-900 border-neutral-700/[0.3] border":
+                            pathname === menuItem.href,
+                        }
+                      )}
+                    >
+                 
+                        <menuItem.icon selected={pathname === menuItem.href} />
+                        <span>{menuItem.name}</span>
+                     
+                    </Link>
+                  </li>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="right"
+                  className="bg-black/10 backdrop-blur-xl"
+                >
+                  <p>{menuItem.name}</p>
+                </TooltipContent>
+              </Tooltip>
+            </ul>
+          ))}
+        </TooltipProvider>
       </div>
-      <div className="mt-4">
-        <Popover>
-          <PopoverTrigger className="relative bg-neutral-900 flex justify-between  border border-neutral-700/[0.3] rounded-xl w-[90%] h-16  flex-col mx-auto  px-2 py-3 shadow-[0_1px_0_0_theme(colors.white/10%)_inset,0_0_0_1px_theme(colors.white/5%)] outline-none">
-            <div className="flex flex-row w-full ">
-              <Avatar className="w-10 h-10">
-                <AvatarImage
-                  src={user?.imageUrl}
-                  alt="@shadcn"
-                  className="rounded-xl"
-                />
-
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col justify-start">
-                <span className="font-normal text-sm  mx-1  text-zinc-300   ">
-                  {user?.firstName} {user?.lastName}
-                </span>
-                <span className="font-bold text-[10px] px-1 text-start  text-muted-foreground/50   ">
-                  {"@" + user?.username}
-                </span>
-              </div>
-              <div className="flex flex-row justify-end mx-auto">
-                <ChevronDown className="w-6 h-6 text-zinc-500 place-self-center absolute -right-5 top-50  mx-8" />
-              </div>
-            </div>
-          </PopoverTrigger>
-          <PopoverContent className="bg-neutral-900 border border-neutral-700/[0.2] rounded-xl shadow-md h-28 w-64 mt-1">
-            <div className="flex flex-col justify-start items-start gap-y-1">
-              <button className="flex flex-row items-center  w-60 -mx-2 h-10 px-2 gap-x-2  text-sm font-medium text-zinc-200  hover:bg-zinc-950 rounded-xl hover:border-neutral-700/[0.5] hover:shadow-[0_2px_7px_1px_theme(colors.white/10%)_inset,0_0_0_1px_theme(colors.white/5%)]  ">
-                <User size={16} />
-                View Profile
-              </button>
-              
-              <SignOutButton>
-                <button className="flex flex-row items-center  w-60 -mx-2 h-10 px-2 gap-x-2  text-sm font-medium text-zinc-200  hover:bg-zinc-950 rounded-xl hover:border-neutral-700/[0.5] hover:shadow-[0_2px_5px_0.5px_theme(colors.white/5%)_inset,0_0_0_1px_theme(colors.white/5%)]  ">
-                  <LogOut size={16} />
-                  Logout
-                </button>
-              </SignOutButton>
-            </div>
-          </PopoverContent>
-        </Popover>
-      </div>
-      <SidebarList />
-    </div>
+    </nav>
   );
 };

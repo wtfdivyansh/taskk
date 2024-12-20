@@ -17,7 +17,7 @@ export default function SearchBar() {
     debounce()
   }, [search]);
     return (
-      <div className="relative flex items-center  max-w-2xl">
+      <div className="relative flex items-center ">
         <FiSearch className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 transform text-neutral-600" />
         <Input
           placeholder="Search tasks.."

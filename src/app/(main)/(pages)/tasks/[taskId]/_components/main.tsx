@@ -29,9 +29,9 @@ export default  function Main({ boardId}: { boardId: string }) {
       }).flat(1);
    
   return (
-    <div className="flex flex-row items-start justify-between gap-x-1 mt-4">
-      <Tabs defaultValue="list" className="w-full ">
-        <div className="flex flex-row items-center justify-between gap-x-2">
+    <div className="w-full gap-x-1 mt-2 p-1">
+      <Tabs defaultValue="list" className=" ">
+        <div className="flex flex-row items-start justify-between w-full  ">
           <TabsList className="bg-neutral-950 mx-2">
             <TabsTrigger value="board" className="flex flex-row gap-x-1 ">
               <LuBarChartBig />
@@ -45,25 +45,25 @@ export default  function Main({ boardId}: { boardId: string }) {
               Calendar
             </TabsTrigger>
           </TabsList>
-          <div className="flex flex-row items-center justify-center gap-x-2">
+          <div className="flex flex-row items-center gap-x-2">
             <SearchBar />
             <FilterButton />
             <AddColumn boardId={boardId} />
           </div>
         </div>
         {isLoading && (
-        <div className="flex flex-col items-center justify-start w-full ">
+        <div className="flex flex-col items-center justify-start w-full bg-neutral-950 mt-2 ">
           <Loading />
         </div>
         )}
         <>
-        <TabsContent value="board" className="mx-2">
+        <TabsContent value="board" className="">
           <Boards columns={columns} boardId={boardId} />
         </TabsContent>
-        <TabsContent value="list" className="mx-2  ">
+        <TabsContent value="list" className=" w-full  ">
           <TableList columns={columns} />
         </TabsContent>
-        <TabsContent value="calendar" className="w-full  px-1">
+        <TabsContent value="calendar" className="w-full">
           <Calender tasks={tasks} />
         </TabsContent>
         </>

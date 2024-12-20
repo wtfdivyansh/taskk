@@ -24,8 +24,7 @@ export default async function TaskPage({
     return <div>Task not found</div>;
   }
   return (
-    <div className="border-l-[1px] border-t-[1px] pb-20 h-full rounded-l-3xl backdrop-blur-sm border-muted-foreground/20  mt-2 bg-[#0F1011] rounded-lg">
-      <div>
+      <div className="w-full bg-neutral-900/30">
         <div className="flex flex-col gap-1 relative bg-[#0F1011]">
           <ProjectHeader name={task.name} />
         </div>
@@ -120,6 +119,5 @@ export default async function TaskPage({
             <Main boardId={task.id} />
         </div>
       </div>
-    </div>
   );
 }

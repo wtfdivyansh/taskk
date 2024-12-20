@@ -10,7 +10,7 @@ export default function AddColumn({boardId}:{boardId:string}) {
       setIsOpen(true)
     }
     return (
-      <Button variant="outline" className="w-24 px-2 h-8  cursor-pointer " onClick={handleClick}>
+      <Button variant="outline" className="w-24 px-2 h-fit  cursor-pointer " onClick={handleClick}>
         <Plus size={16} />
         Add List
       </Button>

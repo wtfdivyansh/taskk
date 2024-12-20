@@ -17,7 +17,7 @@ export default function TableList({ columns }: BoardsProps) {
   const { setIsOpen, setColumnId } = useCardModalStore();
 
   return (
-    <div className="flex flex-col mx-auto rounded-lg bg-[#0b0b0b] w-full h-screen gap-y-1 ">
+    <div className="flex flex-col  rounded-lg bg-neutral-950 w-full h-full overflow-scroll gap-y-1 ">
       {columns.map((column, index) => {
         const tasks = column.todos.map((task) => {
           return {

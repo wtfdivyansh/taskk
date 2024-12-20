@@ -11,10 +11,10 @@ export default function SidebarList() {
   return (
     <div className="flex flex-col gap-y-1 ">
       {sidebarList.map((item: { name: string; icon: any; href: string }) => (
-        <Link href={item.href} key={item.name}>
+        <Link href={item.href} key={item.name} className="w-8 h-8">
           <div
             className={cn(
-              "flex items-center w-[260px] justify-between rounded-lg px-4 py-2 text-sm font-medium transition-all hover:bg-neutral-900 hover:border-neutral-700/[0.3] hover:border mx-3 hover:scale-102 group ",
+              "flex items-center justify-between rounded-lg px-4 py-2 text-sm font-medium transition-all hover:bg-neutral-900 hover:border-neutral-700/[0.3] hover:border mx-3 hover:scale-102 group ",
               {
                 "bg-neutral-900 border-neutral-700/[0.3] border":
                   pathname === item.href,

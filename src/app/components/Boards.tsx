@@ -123,7 +123,7 @@ export default function Boards({columns,boardId}:BoardsProps) {
      },[columns]);
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="flex flex-row gap-x-2 w-screen" 
+      <div className="flex flex-row gap-x-2 w-full" 
       >
         {list?.map((column, index) => (
             <SingleList column={column} key={column.id} index={index}  />

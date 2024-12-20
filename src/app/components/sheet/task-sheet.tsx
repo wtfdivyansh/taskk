@@ -1,23 +1,17 @@
-"use client"
-import Subtasks from "@/app/(main)/tasks/[taskId]/_components/subtasks";
+"use client";
+import Subtasks from "@/app/(main)/(pages)/tasks/[taskId]/_components/subtasks";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
-
   SheetTrigger,
-  SheetClose
+  SheetClose,
 } from "@/components/ui/sheet";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
-import { Task} from "@/lib/types";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Task } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import {  Edit, Trash2, X } from "lucide-react";
+import { Edit, Trash2, X } from "lucide-react";
 import { RxDotsVertical } from "react-icons/rx";
 import CommentButton from "../comment/comment-button";
 import CommentBox from "../comment/comment-box";
@@ -27,19 +21,17 @@ import { useBoardParams } from "@/hooks/use-boardParams";
 import { EditTask } from "../forms/editTask";
 import { Button } from "@/components/ui/button";
 
-type props ={
-    children:React.ReactNode
-    task: Task
-}
+type props = {
+  children: React.ReactNode;
+  task: Task;
+};
 export const TaskSheet: React.FC<props> = ({ children, task }) => {
-
-  
   return (
     <Sheet>
       <SheetTrigger>{children}</SheetTrigger>
       <SheetContent className=" min-w-[500px] p-0 h-full">
         <div className="  flex flex-col  h-full ">
-          <EditTask task={task}  />
+          <EditTask task={task} />
           <div className="px-4">
             <Tabs defaultValue="Subtasks" className="w-full h-full">
               <TabsList className="grid grid-cols-3 gap-x-2 items-start justify-around bg-transparent">
@@ -85,4 +77,4 @@ export const TaskSheet: React.FC<props> = ({ children, task }) => {
       </SheetContent>
     </Sheet>
   );
-}
+};

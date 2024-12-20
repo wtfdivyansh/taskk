@@ -14,11 +14,10 @@ export default function DashboardLayout({
   return (
     <ModalProvider>
       <Toaster />
-      <div className="h-full flex">
-        <Sidebar />
-        <div className=" justify-end ">{children}</div>
+      <div className="min-h-screen overflow-hidden flex">
+          <Sidebar />
+        <div className="w-full">{children}</div>
       </div>
-      
     </ModalProvider>
   );
 }
