@@ -22,20 +22,21 @@ import { useTags, useTaskTags } from "@/hooks/use-tags";
 import MultipleSelector from "@/components/ui/multiselect";
 
 export const addTaskSchema = z.object({
-  tags: z.string().array().min(0),
+  tags: z.string().array().max(2, {message: "You can only add 2 tags"}),
 });
 export default function AddTaskTag({taskId}:{taskId:string}) {
-  const {data} = useTaskTags(taskId)
-
+  const {data:tags,mutate,isPending} = useTaskTags(taskId)
+  const tagLength = tags?.count === 0 ? 2 : 1;
   const form = useForm<z.infer<typeof addTaskSchema>>({
     defaultValues: {
-      tags:data ?? [],
+      tags:[],
     },
     resolver: zodResolver(addTaskSchema),
   });
-  const tags = form.watch("tags");
+  const SelectedTags = form.watch("tags");
   const handleSubmit = async (data: z.infer<typeof addTaskSchema>) => {
-    console.log(data);
+    mutate({data})
+    console.log(data)
   };
   return (
     <Dialog>
@@ -67,14 +68,13 @@ export default function AddTaskTag({taskId}:{taskId:string}) {
               <Label htmlFor="project-name">Tags</Label>
               <div className="space-y-1">
                 <MultipleSelector
-                
-                  options={data?.map((tag: any) => ({
-                    label: tag.name,
-                    value: tag.name,
+                  options={tags?.data?.map((tag: any) => ({
+                    label: tag,
+                    value: tag,
                   }))}
                   disabled={false}
                   onChange={(value: { label: string; value: string }[]) => {
-                    if (value.length <= 2) {
+                    if (value.length <= tagLength) {
                       form.setValue(
                         "tags",
                         value.map((tag: any) => tag.value),
@@ -83,12 +83,12 @@ export default function AddTaskTag({taskId}:{taskId:string}) {
                     } else {
                       form.setValue(
                         "tags",
-                        value.slice(0, 2).map((tag: any) => tag.value),
+                        value.slice(0, tagLength).map((tag: any) => tag.value),
                         { shouldValidate: true }
                       );
                     }
                   }}
-                  value={tags.map((tag: any) => ({
+                  value={SelectedTags.map((tag: any) => ({
                     label: tag,
                     value: tag,
                   }))}
@@ -105,7 +105,7 @@ export default function AddTaskTag({taskId}:{taskId:string}) {
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="button" className="flex-1">
+              <Button type="submit" className="flex-1">
                 Add
               </Button>
             </DialogFooter>

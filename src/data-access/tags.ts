@@ -37,10 +37,18 @@ export const getTagByTask = async (taskId: string) => {
       name:true
     },
   });
+  const tagsByUser = await prisma.taskTags.findMany({
+    where: {
+      taskId: taskId,
+    },
+  });
   const tagWithString = tags.map((tag) => {
     return tag.name
   })
 
-  return tagWithString;
+  return {
+    data: tagWithString,
+    count: tagsByUser.length
+  }
 }
 
