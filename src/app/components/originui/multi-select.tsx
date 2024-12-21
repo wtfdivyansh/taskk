@@ -29,7 +29,6 @@ export default function TagSelect({onChange,SelectedTags}:{onChange:()=>void,Sel
    console.log("tags",tags)
   return (
     <div className="space-y-1">
-      <Label>Multiselect</Label>
       <MultipleSelector
         commandProps={{
           label: "Select Tags",

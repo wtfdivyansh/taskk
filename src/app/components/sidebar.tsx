@@ -85,7 +85,7 @@ export const SidebarSection =() =>{
 const Sidebar = () => {
   return (
     <div className="full">
-      <div className="md:block hidden h-full">
+      <div className="lg:block hidden h-full">
         {" "}
         <SidebarSection />
       </div>

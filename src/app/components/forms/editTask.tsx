@@ -40,6 +40,7 @@ import { Button } from "@/components/ui/button";
 import { SheetClose, SheetHeader } from "@/components/ui/sheet";
 import { RxDotsVertical } from "react-icons/rx";
 import { useEditTask, useGetSingleTask } from "@/hooks/use-get-tasks";
+import AddTaskTag from "../modal/add-task-tag";
 interface editTaskProps {
   task: Omit<Task,"color">
 }
@@ -245,9 +246,7 @@ useEffect(() => {
                             </Badge>
                           ))}
                           {task.tags.length < 2 && canEdit && (
-                            <div className="flex flex-row gap-x-1 h-fit w-fit items-center border border-neutral-700/[0.2] bg-neutral-900/70 rounded-md p-1 ">
-                              <PlusIcon className="text-neutral-500 hover:text-neutral-300 cursor-pointer h-4 w-4" />
-                            </div>
+                            <AddTaskTag taskId={task.id} />
                           )}
                         </div>
                       </div>

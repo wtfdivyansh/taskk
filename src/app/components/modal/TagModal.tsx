@@ -20,7 +20,6 @@ export default function TagModal() {
           <DialogTitle>Create a new Tag</DialogTitle>
         </DialogHeader>
         <TagForm/> 
-       
       </DialogContent>
     </Dialog>
   );

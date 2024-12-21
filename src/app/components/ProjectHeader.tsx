@@ -12,7 +12,7 @@ export function ProjectHeader({name}: {name: string}) {
     <div className="flex flex-col gap-y-2 ">
       <div className="text-4xl sticky top-0 z-[10] p-2 bg-background/50 backdrop-blur-lg flex  border-b bg-[#0F1011] items-center justify-between">
         <div className="flex flex-row items-center">
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <Sheet>
               <SheetTrigger asChild className="ml-2 ">
                 <Button variant={"ghost"} className="mt-[2px]">

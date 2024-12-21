@@ -46,7 +46,7 @@ export default  function Main({ boardId}: { boardId: string }) {
             </TabsTrigger>
           </TabsList>
           <div className="flex flex-row gap-x-1 gap-y-1 flex-wrap mx-2">
-            <div className="flex flex-row items-center flex-wrap  gap-x-2">
+            <div className="flex flex-row items-center   gap-x-2">
               <SearchBar />
             </div>
             <div className="flex flex-row gap-x-1">
