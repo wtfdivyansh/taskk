@@ -18,7 +18,7 @@ export interface Todo {
   title: string;
   description: string | null;
   position: number;
-  priority: "low"|"medium"|"high";
+  priority: PriorityEnum;
   dueDate: Date 
   image: string | null;
   columnId: string;
@@ -71,7 +71,7 @@ export interface TaskColor {
   title: string;
   description: string | null;
   position: number;
-  priority: string;
+  priority: PriorityEnum;
   dueDate: Date ;
   startTime: Date | null;
   endTime: Date | null;
@@ -95,12 +95,18 @@ export interface UploadedFile{
 }
 
 export enum PriorityEnum  {
-  LOW= "low",
-  MEDIUM= "medium",
-  HIGH= "high",
+  LOW = "low",
+  MEDIUM = "medium",
+  HIGH = "high",
 };
 
 export enum ROLE {
   ADMIN = "admin",
   USER = "user",
+}
+
+export enum priority{
+  "low",
+  "medium",
+  "high"
 }

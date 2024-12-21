@@ -6,21 +6,22 @@ import { z } from "zod"
 
 export const updateTask = async (
   taskId: string,
-  data: any
+  data: z.infer<typeof updateTaskSchema>
 ) => {
   const user = await currentUser();
   if (!user) {
     throw new Error("Not logged in");
   }
-  const updatedData = {
-    ...data,
-    assigneeId: data.assigneeId ?? user.id,
-  };
   const task = await prisma.task.update({
     where: {
       id: taskId,
     },
-    data: updatedData,
+    data: {
+      ...data,
+      tags:{
+       
+      }
+    }
   });
   console.log(task);
   return task;

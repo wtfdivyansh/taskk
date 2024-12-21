@@ -31,7 +31,7 @@ export default  function Main({ boardId}: { boardId: string }) {
   return (
     <div className="w-full gap-x-1 mt-2 p-1">
       <Tabs defaultValue="list" className=" ">
-        <div className="flex flex-row items-start justify-between w-full  ">
+        <div className="flex flex-col gap-y-1 sm:flex-row items-start justify-between w-full  ">
           <TabsList className="bg-neutral-950 mx-2">
             <TabsTrigger value="board" className="flex flex-row gap-x-1 ">
               <LuBarChartBig />
@@ -45,30 +45,33 @@ export default  function Main({ boardId}: { boardId: string }) {
               Calendar
             </TabsTrigger>
           </TabsList>
-          <div className="flex flex-row items-center gap-x-2">
-            <SearchBar />
-            <FilterButton />
-            <AddColumn boardId={boardId} />
+          <div className="flex flex-row gap-x-1 gap-y-1 flex-wrap mx-2">
+            <div className="flex flex-row items-center flex-wrap  gap-x-2">
+              <SearchBar />
+            </div>
+            <div className="flex flex-row gap-x-1">
+              <FilterButton />
+              <AddColumn boardId={boardId} />
+            </div>
           </div>
         </div>
         {isLoading && (
-        <div className="flex flex-col items-center justify-start w-full bg-neutral-950 mt-2 ">
-          <Loading />
-        </div>
+          <div className="flex flex-col items-center justify-start w-full bg-neutral-950 mt-2 ">
+            <Loading />
+          </div>
         )}
         <>
-        <TabsContent value="board" className="">
-          <Boards columns={columns} boardId={boardId} />
-        </TabsContent>
-        <TabsContent value="list" className=" w-full  ">
-          <TableList columns={columns} />
-        </TabsContent>
-        <TabsContent value="calendar" className="w-full">
-          <Calender tasks={tasks} />
-        </TabsContent>
+          <TabsContent value="board" className="">
+            <Boards columns={columns} boardId={boardId} />
+          </TabsContent>
+          <TabsContent value="list" className=" w-full  ">
+            <TableList columns={columns} />
+          </TabsContent>
+          <TabsContent value="calendar" className="w-full">
+            <Calender tasks={tasks} />
+          </TabsContent>
         </>
       </Tabs>
-      
     </div>
   );
 }

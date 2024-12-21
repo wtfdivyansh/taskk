@@ -78,3 +78,32 @@ export const getTaskDetails = async (boardId: string, search: string | null) => 
 
   return columns;
 };
+
+
+export const getTaskById = async (taskId: string) => {
+  const user = await currentUser();
+  if (!user) {
+    throw new Error("User not found");
+  }
+  if (!taskId || typeof taskId !== "string" || taskId.trim() === "") {
+    throw new Error("Invalid task ID");
+  }
+  const task = await prisma.task.findUnique({
+    where: {
+      id: taskId,
+    },
+    include: {
+      tags: {
+        include: {
+          tag: true,
+        },
+      },
+      assignee: true,
+    },
+   
+});
+if (!task) {
+  throw new Error("Task not found");
+}
+return task;
+};

@@ -21,7 +21,7 @@ export const updateTaskSchema = z.object({
     .optional(),
   description: z.optional(z.string().min(0)),
   image: z.string().optional(),
-  status: z.nativeEnum(PriorityEnum, {
+  priority: z.nativeEnum(PriorityEnum, {
     required_error: "Please select a status",
   }),
   tags: z.string().array().min(0),

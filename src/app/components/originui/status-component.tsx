@@ -6,7 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { PriorityEnum } from "@/lib/types";
+import { priority, PriorityEnum } from "@/lib/types";
 
 function StatusDot({ className }: { className?: string }) {
   return (
@@ -33,9 +33,14 @@ export default function StatusSelect({
   defaultValue: PriorityEnum;
   disabled? :boolean
 }) {
+  console.log(defaultValue);
   return (
     <div className="space-y-2">
-      <Select value={defaultValue} onValueChange={onValueChange} disabled={disabled} >
+      <Select
+        value={defaultValue}
+        onValueChange={onValueChange}
+        disabled={disabled}
+      >
         <SelectTrigger
           id="select-32"
           className="[&>span]:flex [&>span]:items-center [&>span]:gap-2 [&>span_svg]:shrink-0 focus:visible:ring-0 focus:ring-0"
@@ -44,19 +49,19 @@ export default function StatusSelect({
           <SelectValue placeholder="Select status" />
         </SelectTrigger>
         <SelectContent className="[&_*[role=option]>span>svg]:shrink-0 [&_*[role=option]>span>svg]:text-muted-foreground/80 [&_*[role=option]>span]:end-2 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:flex [&_*[role=option]>span]:items-center [&_*[role=option]>span]:gap-2 [&_*[role=option]]:pe-8 [&_*[role=option]]:ps-2">
-          <SelectItem value="low">
+          <SelectItem value={PriorityEnum.LOW}>
             <span className="flex items-center gap-2">
               <StatusDot className="text-emerald-600" />
               <span className="truncate">Low</span>
             </span>
           </SelectItem>
-          <SelectItem value="medium">
+          <SelectItem value={PriorityEnum.MEDIUM}>
             <span className="flex items-center gap-2">
               <StatusDot className="text-yellow-500" />
               <span className="truncate">Medium</span>
             </span>
           </SelectItem>
-          <SelectItem value="high">
+          <SelectItem value={PriorityEnum.HIGH}>
             <span className="flex items-center gap-2">
               <StatusDot className="text-red-500" />
               <span className="truncate">High</span>

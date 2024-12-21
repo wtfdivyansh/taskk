@@ -27,7 +27,7 @@ import StatusSelect from "../originui/status-component";
 import { DatePicker } from "../DatePicker";
 import AssigneeSelect from "../assignee-select";
 import { Textarea } from "@/components/ui/textarea";
-import { PriorityEnum, Task } from "@/lib/types";
+import { priority, PriorityEnum, Task } from "@/lib/types";
 import { useAssignee } from "@/hooks/use-assignee";
 import { useBoardParams } from "@/hooks/use-boardParams";
 import { useEffect, useState } from "react";
@@ -39,21 +39,24 @@ import { updateTaskSchema } from "@/lib/schema";
 import { Button } from "@/components/ui/button";
 import { SheetClose, SheetHeader } from "@/components/ui/sheet";
 import { RxDotsVertical } from "react-icons/rx";
+import { useEditTask, useGetSingleTask } from "@/hooks/use-get-tasks";
 interface editTaskProps {
-  task: Task;
+  task: Omit<Task,"color">
 }
-
 export function EditTask({ task }: editTaskProps) {
+  const [taskData, setTaskData] = useState<Omit<Task, "color">>(task);
   const [canEdit, setCanEdit] = useState(false);
  const boardId = useBoardParams();
- const { data } = useAssignee(boardId.toString())
+ const { data:assignee } = useAssignee(boardId.toString())
+ const {data}= useGetSingleTask(task.id)
+ const { mutateAsync, isPending } = useEditTask(boardId.toString());
  const initialValues = {
-   title: task.title,
-   description: task.description ?? "",
-   status: task.priority as PriorityEnum, 
+   title: taskData.title,
+   description: taskData.description ?? "",
+   priority: taskData.priority as PriorityEnum,
    tags: [],
-   dueDate: task.dueDate,
-   assigneeId: task.assignee.id ,
+   dueDate: taskData.dueDate,
+   assigneeId: taskData.assignee.id,
  };
   const form = useForm<z.infer<typeof updateTaskSchema>>({
     defaultValues: initialValues,
@@ -75,12 +78,31 @@ const handleSubmit = async (data: z.infer<typeof updateTaskSchema>) => {
         : data[key];
     }
   }
+  try{
+   await mutateAsync({taskId:task.id,data})
+    setCanEdit(false)
+  }catch(e){
+    console.log(e);
+  }
+
 };
 useEffect(()=>{
    if (canEdit ===false) {
      form.reset(initialValues);
    }
 },[canEdit])
+useEffect(()=>{
+  setTaskData(task)
+},[])
+useEffect(() => {
+  if (data) {
+    const taskData: Omit<Task, "color"> = {
+      ...data,
+      priority: data.priority as PriorityEnum,
+    };
+    setTaskData(taskData);
+  }
+}, [data]);
   return (
     <>
       <Form {...form}>
@@ -91,7 +113,15 @@ useEffect(()=>{
                 <X className="hover:text-white text-neutral-600 size-6" />
               </SheetClose>
               <div className="flex flex-row px-5 gap-x-1 items-center justify-center ">
-                {canEdit && (<Button type="submit" className="bg-sky-500 hover:bg-skey-500/80 border border-blue-700/[0.5] text-gray-200 rounded-md h-8 w-fit p-2">save</Button>)}
+                {canEdit && (
+                  <Button
+                    type="submit"
+                    className="bg-sky-500 hover:bg-skey-500/80 border border-blue-700/[0.5] text-gray-200 rounded-md h-8 w-fit p-2"
+                    disabled={isPending}
+                  >
+                    {isPending ? "Saving..." : "save"}
+                  </Button>
+                )}
                 <Edit
                   className={cn(
                     "size-5 hover:text-white text-neutral-600 cursor-pointer",
@@ -127,7 +157,7 @@ useEffect(()=>{
             <div className="flex flex-col gap-y-4">
               <FormField
                 control={form.control}
-                name="status"
+                name="priority"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -182,7 +212,7 @@ useEffect(()=>{
                         </p>
                         <AssigneeSelect
                           disabled={!canEdit}
-                          data={data || []}
+                          data={assignee || []}
                           defaultValue={field.value}
                           onChange={field.onChange}
                         />
