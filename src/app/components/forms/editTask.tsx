@@ -42,68 +42,61 @@ import { RxDotsVertical } from "react-icons/rx";
 import { useEditTask, useGetSingleTask } from "@/hooks/use-get-tasks";
 import AddTaskTag from "../modal/add-task-tag";
 interface editTaskProps {
-  task: Omit<Task,"color">
+  task: Omit<Task, "color">;
 }
 export function EditTask({ task }: editTaskProps) {
   const [taskData, setTaskData] = useState<Omit<Task, "color">>(task);
   const [canEdit, setCanEdit] = useState(false);
- const boardId = useBoardParams();
- const { data:assignee } = useAssignee(boardId.toString())
- const {data}= useGetSingleTask(task.id)
- const { mutateAsync, isPending } = useEditTask(boardId.toString());
- const initialValues = {
-   title: taskData.title,
-   description: taskData.description ?? "",
-   priority: taskData.priority as PriorityEnum,
-   tags: [],
-   dueDate: taskData.dueDate,
-   assigneeId: taskData.assignee.id,
- };
+  const boardId = useBoardParams();
+  const { data: assignee } = useAssignee(boardId.toString());
+  const { data } = useGetSingleTask(task.id);
+  const { mutateAsync, isPending } = useEditTask(boardId.toString());
+  const initialValues = {
+    title: taskData.title,
+    description: taskData.description ?? "",
+    priority: taskData.priority as PriorityEnum,
+    dueDate: taskData.dueDate,
+    assigneeId: taskData.assignee.id,
+  };
   const form = useForm<z.infer<typeof updateTaskSchema>>({
     defaultValues: initialValues,
     resolver: zodResolver(updateTaskSchema),
   });
-const handleSubmit = async (data: z.infer<typeof updateTaskSchema>) => {
-  for (const key in data) {
-    if ((data as any)[key] == (initialValues as any)[key]) {
-      delete (data as any)[key];
+  const handleSubmit = async (data: z.infer<typeof updateTaskSchema>) => {
+    for (const key in data) {
+      if ((data as any)[key] == (initialValues as any)[key]) {
+        delete (data as any)[key];
+      }
+      if (key == "dueDate") {
+        data[key].toISOString() === initialValues[key].toISOString()
+          ? delete (data as any)[key]
+          : data[key];
+      }
     }
-    if (key == "dueDate") {
-      data[key].toISOString() === initialValues[key].toISOString()
-        ? delete (data as any)[key]
-        : data[key];
+    try {
+      await mutateAsync({ taskId: task.id, data });
+      setCanEdit(false);
+    } catch (e) {
+      console.log(e);
     }
-    if (key == "tags") {
-      data[key].length === initialValues[key].length
-        ? delete (data as any)[key]
-        : data[key];
+  };
+  useEffect(() => {
+    if (canEdit === false) {
+      form.reset(initialValues);
     }
-  }
-  try{
-   await mutateAsync({taskId:task.id,data})
-    setCanEdit(false)
-  }catch(e){
-    console.log(e);
-  }
-
-};
-useEffect(()=>{
-   if (canEdit ===false) {
-     form.reset(initialValues);
-   }
-},[canEdit])
-useEffect(()=>{
-  setTaskData(task)
-},[])
-useEffect(() => {
-  if (data) {
-    const taskData: Omit<Task, "color"> = {
-      ...data,
-      priority: data.priority as PriorityEnum,
-    };
-    setTaskData(taskData);
-  }
-}, [data]);
+  }, [canEdit]);
+  useEffect(() => {
+    setTaskData(task);
+  }, []);
+  useEffect(() => {
+    if (data) {
+      const taskData: Omit<Task, "color"> = {
+        ...data,
+        priority: data.priority as PriorityEnum,
+      };
+      setTaskData(taskData);
+    }
+  }, [data]);
   return (
     <>
       <Form {...form}>
@@ -222,38 +215,28 @@ useEffect(() => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="tags"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <div className=" flex flex-row w-full gap-x-1 item-center ">
-                        <Tags className=" text-neutral-500  size-6"></Tags>
-                        <p className="text-md text-neutral-500 text-justify w-24 ">
-                          Tags{" "}
-                        </p>
-                        <div className="flex flex-row gap-x-1 items-center ">
-                          {task.tags.map((t, index) => (
-                            <Badge
-                              key={index}
-                              className={cn(
-                                "text-xs text-neutral-300 w-fit h-fit px-1 ",
-                                t.tag.color
-                              )}
-                            >
-                              {t.tag.name}
-                            </Badge>
-                          ))}
-                          {task.tags.length < 2 && canEdit && (
-                            <AddTaskTag taskId={task.id} />
-                          )}
-                        </div>
-                      </div>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+              <div className=" flex flex-row w-full gap-x-1 item-center ">
+                <Tags className=" text-neutral-500  size-6"></Tags>
+                <p className="text-md text-neutral-500 text-justify w-24 ">
+                  Tags{" "}
+                </p>
+                <div className="flex flex-row gap-x-1 items-center ">
+                  {task.tags.map((t, index) => (
+                    <Badge
+                      key={index}
+                      className={cn(
+                        "text-xs text-neutral-300 w-fit h-fit px-1 ",
+                        t.tag.color
+                      )}
+                    >
+                      {t.tag.name}
+                    </Badge>
+                  ))}
+                  {task.tags.length < 2 && (
+                    <AddTaskTag taskId={task.id} />
+                  )}
+                </div>
+              </div>
             </div>
             <FormField
               control={form.control}

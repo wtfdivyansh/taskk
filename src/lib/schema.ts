@@ -24,7 +24,6 @@ export const updateTaskSchema = z.object({
   priority: z.nativeEnum(PriorityEnum, {
     required_error: "Please select a status",
   }),
-  tags: z.string().array().min(0),
   dueDate: z.coerce.date(),
   assigneeId: z.string().optional(),
 })

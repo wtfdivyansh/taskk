@@ -9,20 +9,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CircleAlert, PlusIcon } from "lucide-react";
-import { useState } from "react";
-import TagSelect from "../originui/multi-select";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useTags, useTaskTags } from "@/hooks/use-tags";
-import MultipleSelector from "@/components/ui/multiselect";
+import { useTaskTags } from "@/hooks/use-tags";
+import MultipleSelector ,{Option} from "@/components/ui/multiselect";
 
 export const addTaskSchema = z.object({
-  tags: z.string().array().max(2, {message: "You can only add 2 tags"}),
+  tags: z.array(z.object({label:z.string(),value:z.string()})).max(2, {message: "You can only add 2 tags"}),
 });
 export default function AddTaskTag({taskId}:{taskId:string}) {
   const {data:tags,mutate,isPending} = useTaskTags(taskId)
@@ -69,29 +66,26 @@ export default function AddTaskTag({taskId}:{taskId:string}) {
               <div className="space-y-1">
                 <MultipleSelector
                   options={tags?.data?.map((tag: any) => ({
-                    label: tag,
-                    value: tag,
+                    label: tag.name,
+                    value: tag.id,
                   }))}
                   disabled={false}
                   onChange={(value: { label: string; value: string }[]) => {
                     if (value.length <= tagLength) {
                       form.setValue(
                         "tags",
-                        value.map((tag: any) => tag.value),
+                        value.map((tag: Option) => ({ label: tag.label, value: tag.value })),
                         { shouldValidate: true }
                       );
                     } else {
                       form.setValue(
                         "tags",
-                        value.slice(0, tagLength).map((tag: any) => tag.value),
+                        value.slice(0, tagLength).map((tag: Option) => ({label:tag.label,value:tag.value})),
                         { shouldValidate: true }
                       );
                     }
                   }}
-                  value={SelectedTags.map((tag: any) => ({
-                    label: tag,
-                    value: tag,
-                  }))}
+                  value={SelectedTags}
                   placeholder="Select tags"
                   loadingIndicator="Loading..."
                   hideClearAllButton

@@ -9,10 +9,10 @@ import { useSearchParams } from "next/navigation";
 export function useGetTasks(boardId: string) {
    const search = useSearchParams().get("search");
    const { data, isLoading, error } = useQuery({
-    queryKey: ["tasks", boardId],
+    queryKey: ["tasks", boardId,search],
     queryFn: async () => {
       const res = await getTaskDetails(boardId,search);
-      
+      console.log(res)
       return res
     },
     enabled: !!boardId,

@@ -11,27 +11,13 @@ export const addTagsToTask = async (taskId: string, data: z.infer<typeof addTask
   if (!user) {
     throw new Error("User not found");
   }
-  const tags = await Promise.all(
-    data.tags.map((tag) =>
-      prisma.tags.create({
-        data: {
-          name: tag,
-          userId: user.id,
-          color: getRandomColor(),
-        },
-        select:{
-            id:true
-        }
-      })
-    )
-  );
   const taskTags = await prisma.taskTags.createMany({
-    data: tags.map((tag) => ({
+    data: data.tags.map((tag) => ({
       taskId: taskId,
-      tagId: tag.id,
+      tagId: tag.value,
     })),
   });
 
-  console.log(tags)
-  return taskTags;
+  console.log(data)
+  return taskTags
 };
