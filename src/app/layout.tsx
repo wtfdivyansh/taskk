@@ -8,6 +8,7 @@ import ReactQueryProvider from "@/providers/ReactQueryProvider";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "./api/uploadthing/core";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const inter = DM_Sans({ subsets: ["latin"] });
 
@@ -26,10 +27,7 @@ export default function RootLayout({
     <ReactQueryProvider>
       <ClerkProvider>
         <html lang="en">
-          <NextSSRPlugin
-           
-            routerConfig={extractRouterConfig(ourFileRouter)}
-          />
+          <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
           <body className={inter.className}>
             <ThemeProvider
               attribute="class"
@@ -37,7 +35,7 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              {children}
+              <NuqsAdapter>{children}</NuqsAdapter>
             </ThemeProvider>
           </body>
         </html>

@@ -8,8 +8,9 @@ import { useSearchParams } from "next/navigation";
 
 export function useGetTasks(boardId: string) {
    const search = useSearchParams().get("search");
+   const priority = useSearchParams().get("priority");
    const { data, isLoading, error } = useQuery({
-    queryKey: ["tasks", boardId,search],
+    queryKey: ["tasks", boardId,search,priority],
     queryFn: async () => {
       const res = await getTaskDetails(boardId,search);
       console.log(res)

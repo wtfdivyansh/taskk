@@ -22,7 +22,7 @@ export function DatePicker({value, onChange,...props}: any) {
     <Popover>
       <PopoverTrigger asChild>
         <Button
-        disabled={!props.disabled}
+         disabled={!props.disabled}
           variant={"outline"}
           className={cn(
             "w-[250px] justify-start text-left font-normal",
@@ -35,7 +35,6 @@ export function DatePicker({value, onChange,...props}: any) {
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" >
         <Calendar
-        disabled={!props.disabled}
           mode="single"
           selected={value.toString()}
           onSelect={onChange}

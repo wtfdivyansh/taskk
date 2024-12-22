@@ -13,6 +13,7 @@ import { getTaskDetails } from "@/actions/getTaskDetails";
 import { useGetTasks } from "@/hooks/use-get-tasks";
 import { useSearchParams } from "next/navigation";
 import Loading from "../../loading";
+import { Separator } from "@/components/ui/separator";
 
 
 export default  function Main({ boardId}: { boardId: string }) {
@@ -50,10 +51,13 @@ export default  function Main({ boardId}: { boardId: string }) {
               <SearchBar />
             </div>
             <div className="flex flex-row gap-x-1">
-              <FilterButton />
               <AddColumn boardId={boardId} />
             </div>
           </div>
+        </div>
+        <Separator className="w-full " />
+        <div className="flex flex-row mx-2 mt-2">
+          <FilterButton />
         </div>
         {isLoading && (
           <div className="flex flex-col items-center justify-start w-full bg-neutral-950 mt-2 ">
