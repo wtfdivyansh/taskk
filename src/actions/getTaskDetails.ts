@@ -1,18 +1,25 @@
 "use server";
 import prisma from "@/lib/db";
+import { PriorityEnum } from "@/lib/types";
 import { currentUser } from "@clerk/nextjs/server";
+import { equal } from "assert";
+import { title } from "process";
 
-export const getTaskDetails = async (boardId: string, search: string | null) => {
+export const getTaskDetails = async (
+  boardId: string,
+  search: string | null,
+  priority: string | null,
+  assignee: string | null,
+  dueDate: string | null
+) => {
   const user = await currentUser();
   if (!user) {
     throw new Error("User not found");
   }
 
-
   if (!boardId || typeof boardId !== "string" || boardId.trim() === "") {
     throw new Error("Invalid board ID");
   }
-
 
   const existingColumns = await prisma.column.findMany({
     where: {
@@ -21,9 +28,25 @@ export const getTaskDetails = async (boardId: string, search: string | null) => 
   });
 
   if (existingColumns.length === 0) {
-    return []
+    return [];
+  }
+  const conditions: any = {};
+  if (priority) {
+    conditions.priority = { equals: priority as PriorityEnum};
   }
 
+  if (assignee) {
+    conditions.assigneeId = { equals: assignee };
+  }
+  if (dueDate) {
+    conditions.dueDate = { equals: dueDate };
+  }
+  if (search && search.trim() !== "") {
+    conditions.OR = [
+      {title : {contains: search, mode: "insensitive"}},
+      {description : {contains: search, mode: "insensitive"}},
+    ]
+  }
 
   const baseQuery = {
     where: {
@@ -39,46 +62,18 @@ export const getTaskDetails = async (boardId: string, search: string | null) => 
           },
           assignee: true,
         },
+        where: conditions
       },
     },
   };
 
-
-  if (search && search.trim() !== "") {
-    const columnsWithSearch = await prisma.column.findMany({
-      ...baseQuery,
-      include: {
-        ...baseQuery.include,
-        todos: {
-          ...baseQuery.include.todos,
-          where: {
-            title: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-        },
-      },
-    });
-
-    if (
-      !columnsWithSearch ||
-      columnsWithSearch.every((column) => column.todos.length === 0)
-    ) {
-      return await prisma.column.findMany(baseQuery);
-    }
-
-    return columnsWithSearch;
-  }
+ 
+  console.log("conditions",conditions);
 
   const columns = await prisma.column.findMany(baseQuery);
-  if (!columns) {
-    throw new Error("Unexpected error: No data found");
-  }
 
   return columns;
 };
-
 
 export const getTaskById = async (taskId: string) => {
   const user = await currentUser();
@@ -100,10 +95,9 @@ export const getTaskById = async (taskId: string) => {
       },
       assignee: true,
     },
-   
-});
-if (!task) {
-  throw new Error("Task not found");
-}
-return task;
+  });
+  if (!task) {
+    throw new Error("Task not found");
+  }
+  return task;
 };

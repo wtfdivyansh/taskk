@@ -12,7 +12,7 @@ export function useGetTasks(boardId: string) {
    const { data, isLoading, error } = useQuery({
     queryKey: ["tasks", boardId,search,priority],
     queryFn: async () => {
-      const res = await getTaskDetails(boardId,search);
+      const res = await getTaskDetails(boardId,search,priority,null,null);
       console.log(res)
       return res
     },
