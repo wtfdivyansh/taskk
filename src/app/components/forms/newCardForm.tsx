@@ -58,6 +58,7 @@ export function NewCardForm() {
     setIsLoading(true);
     try {
       console.log(data);
+      // todo add mutate to here to have optimistic ui 
       await CreateCard(data, boardId, columnId);
     } catch (error) {
       console.log(error);

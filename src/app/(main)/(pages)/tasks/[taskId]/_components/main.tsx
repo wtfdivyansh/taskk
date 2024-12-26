@@ -9,15 +9,15 @@ import AddColumn from "@/app/components/AddColumn";
 import Boards from "@/app/components/Boards";
 import TableList from "@/app/components/TableList";
 import Calender from "@/app/components/Calender";
-import { getTaskDetails } from "@/actions/getTaskDetails";
 import { useGetTasks } from "@/hooks/use-get-tasks";
-import { useSearchParams } from "next/navigation";
 import Loading from "../../loading";
 import { Separator } from "@/components/ui/separator";
+import { useBoardParams } from "@/hooks/use-boardParams";
 
 
-export default  function Main({ boardId}: { boardId: string }) {
-  const { data:columns =[], isLoading } = useGetTasks(boardId);
+export default  function Main() {
+  const boardId = useBoardParams();
+  const { data:columns =[], isLoading } = useGetTasks(boardId.toString());
     const tasks: TaskColor[] = columns
       .map((column) => {
         const color = column.color;
@@ -30,10 +30,10 @@ export default  function Main({ boardId}: { boardId: string }) {
       }).flat(1);
    
   return (
-    <div className="w-full gap-x-1 mt-2 p-1">
-      <Tabs defaultValue="list" className=" ">
+    <div className="w-full gap-x-1 mt-2 p-1 border-2 border-neutral-700/[0.6] rounded-md">
+      <Tabs defaultValue="list" className=" py-1 flex  flex-col ">
         <div className="flex flex-col gap-y-1 sm:flex-row items-start justify-between w-full  ">
-          <TabsList className="bg-neutral-950 mx-2">
+          <TabsList className="bg-neutral-950 ">
             <TabsTrigger value="board" className="flex flex-row gap-x-1 ">
               <LuBarChartBig />
               Board
@@ -51,7 +51,7 @@ export default  function Main({ boardId}: { boardId: string }) {
               <SearchBar />
             </div>
             <div className="flex flex-row gap-x-1">
-              <AddColumn boardId={boardId} />
+              <AddColumn boardId={boardId.toString()} />
             </div>
           </div>
         </div>
@@ -60,13 +60,13 @@ export default  function Main({ boardId}: { boardId: string }) {
           <FilterButton />
         </div>
         {isLoading && (
-          <div className="flex flex-col items-center justify-start w-full bg-neutral-950 mt-2 ">
+          <div className="flex flex-row  items-center justify-center w-full h-auto  mt-2 ">
             <Loading />
           </div>
         )}
         <>
           <TabsContent value="board" className="">
-            <Boards columns={columns} boardId={boardId} />
+            <Boards columns={columns} boardId={boardId.toString()} />
           </TabsContent>
           <TabsContent value="list" className=" w-full  ">
             <TableList columns={columns} />

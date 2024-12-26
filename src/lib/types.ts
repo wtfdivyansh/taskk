@@ -18,8 +18,8 @@ export interface Todo {
   title: string;
   description: string | null;
   position: number;
-  priority: PriorityEnum;
-  dueDate: Date 
+  priority: "low" | "medium" | "high";
+  dueDate: Date;
   image: string | null;
   columnId: string;
   createdAt: Date;
@@ -55,7 +55,7 @@ export interface TaskColor {
   title: string;
   content: string | null;
   position: number;
-  priority: string | null;
+  priority: string;
   dueDate: Date | null;
   startTime: Date | null;
   endTime: Date | null;

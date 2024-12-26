@@ -116,7 +116,9 @@ export default async function TaskPage({
               ))}
             </div>
           </div>
-            <Main boardId={task.id} />
+          <div className="p-2">
+            <Main />
+          </div>
         </div>
       </div>
   );

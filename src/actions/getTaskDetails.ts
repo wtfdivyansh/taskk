@@ -30,9 +30,9 @@ export const getTaskDetails = async (
   if (existingColumns.length === 0) {
     return [];
   }
-  const conditions: any = {};
+  let conditions: any = {};
   if (priority) {
-    conditions.priority = { equals: priority as PriorityEnum};
+    conditions.priority = { equals: priority as PriorityEnum };
   }
 
   if (assignee) {
@@ -43,9 +43,9 @@ export const getTaskDetails = async (
   }
   if (search && search.trim() !== "") {
     conditions.OR = [
-      {title : {contains: search, mode: "insensitive"}},
-      {description : {contains: search, mode: "insensitive"}},
-    ]
+      { title: { contains: search, mode: "insensitive" } },
+      { description: { contains: search, mode: "insensitive" } },
+    ];
   }
 
   const baseQuery = {
@@ -62,15 +62,15 @@ export const getTaskDetails = async (
           },
           assignee: true,
         },
-        where: conditions
+        where: conditions,
       },
     },
   };
 
- 
-  console.log("conditions",conditions);
+  console.log("conditions", conditions);
 
   const columns = await prisma.column.findMany(baseQuery);
+  console.log("length", columns.length);
 
   return columns;
 };

@@ -9,6 +9,9 @@ export default function SearchBar() {
   useEffect(() => {
     const debounce = ()=>{
       const timer=setTimeout(() => {
+        if(search.trim() === ""){
+          return;
+        }
         router.push(`?search=${search}`);
       }, 0);
       console.log("timer", timer);
