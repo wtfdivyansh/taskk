@@ -25,7 +25,7 @@ export function DatePicker({value, onChange,...props}: any) {
          disabled={!props.disabled}
           variant={"outline"}
           className={cn(
-            "w-[250px] justify-start text-left font-normal",
+            "w-full justify-start text-left font-normal",
             !value && "text-muted-foreground"
           )}
         >

@@ -40,15 +40,16 @@ export default function FilterButton() {
     setClearFilters(false);
   };
   useEffect(() => {
-    setClearFilters(true);
+    if (priority == null && assignee == null && dueDate == null) {
+      setClearFilters(false);
+    } else {
+      setClearFilters(true);
+    }
   }, [priority, assignee, dueDate]);
   return (
-    <div className="flex flex-row gap-x-1">
-      <Select
-        defaultValue={priority ?? undefined}
-        onValueChange={onStatusChange}
-      >
-        <SelectTrigger className="flex flex-row gap-x-1 items-center bg-neutral-900/40 ring-0 focus:visible:ring-0 focus:visible:ring-0 ">
+    <div className="flex sm:flex-row flex-col gap-x-1 gap-y-1">
+      <Select value={priority ?? ""} onValueChange={onStatusChange}>
+        <SelectTrigger className="flex flex-row gap-x-1 items-center bg-neutral-900/40 ring-0 focus:visible:ring-0 focus:visible:ring-0 sm:w-auto w-full">
           <ListChecksIcon />
           <SelectValue placeholder="Status" />
           <SelectContent>
@@ -59,8 +60,8 @@ export default function FilterButton() {
           </SelectContent>
         </SelectTrigger>
       </Select>
-      <Select defaultValue={undefined} onValueChange={onAssigneeChange}>
-        <SelectTrigger className="flex flex-row gap-x-1 items-center bg-neutral-900/40 ring-0 focus:visible:ring-0 ">
+      <Select value={assignee ?? ""} onValueChange={onAssigneeChange}>
+        <SelectTrigger className="flex flex-row gap-x-1 items-center bg-neutral-900/40 ring-0 focus:visible:ring-0 sm:w-auto w-full ">
           <UserIcon />
           <SelectValue placeholder="Assignee" />
           <SelectContent>
@@ -71,11 +72,14 @@ export default function FilterButton() {
           </SelectContent>
         </SelectTrigger>
       </Select>
-      <DatePicker
-        value={dueDate ? new Date(dueDate) : new Date()}
-        onChange={onDueDateChange}
-        disabled={!false}
-      />
+      <div className="sm:w-auto w-full">
+        <DatePicker
+          value={dueDate ? new Date(dueDate) : new Date()}
+          className="bg-neutral-900/40 ring-0 focus:visible:ring-0 sm:w-auto w-full"
+          onChange={onDueDateChange}
+          disabled={!false}
+        />
+      </div>
       {clearFilters && (
         <Button onClick={onClearFilters} variant={"ghost"}>
           <X className="flex items-center  text-neutral-500" />

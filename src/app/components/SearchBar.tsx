@@ -20,7 +20,7 @@ export default function SearchBar() {
     debounce()
   }, [search]);
     return (
-      <div className="relative flex items-center col-span-2 ">
+      <div className="relative flex items-center col-span-2 w-full  sm:w-64">
         <FiSearch className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 transform text-neutral-600" />
         <Input
           placeholder="Search tasks.."
@@ -29,7 +29,7 @@ export default function SearchBar() {
           }}
           value={search}
   
-          className=" pl-8 border border-neutral-700/[0.2] shadow-sm focus-visible:offset-1 focus-visible:ring-neutral-900 focus-visible:outline-none focus-visible:ring-0 w-64"
+          className=" pl-8 border border-neutral-700/[0.2] shadow-sm focus-visible:offset-1 focus-visible:ring-neutral-900 focus-visible:outline-none focus-visible:ring-0 w-full sm:w-64"
         />
       </div>
     );

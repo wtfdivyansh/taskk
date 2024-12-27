@@ -31,32 +31,41 @@ export default  function Main() {
    
   return (
     <div className="w-full gap-x-1 mt-2 p-1 border-2 border-neutral-700/[0.6] rounded-md">
-      <Tabs defaultValue="list" className=" py-1 flex  flex-col ">
+      <Tabs defaultValue="board" className=" py-1 flex flex-col ">
         <div className="flex flex-col gap-y-1 sm:flex-row items-start justify-between w-full  ">
-          <TabsList className="bg-neutral-950 ">
-            <TabsTrigger value="board" className="flex flex-row gap-x-1 ">
+          <TabsList className="bg-transparent w-full sm:w-auto flex flex-row  items-start ">
+            <TabsTrigger
+              value="board"
+              className="flex flex-row gap-x-1  rounded-md data-[state=active]:bg-neutral-800/40"
+            >
               <LuBarChartBig />
               Board
             </TabsTrigger>
-            <TabsTrigger value="list" className="flex flex-row gap-x-1">
+            <TabsTrigger
+              value="list"
+              className="flex flex-row gap-x-1  rounded-md data-[state=active]:bg-neutral-800/40"
+            >
               <LuTable />
               Table
             </TabsTrigger>
-            <TabsTrigger value="calendar" className="flex flex-row gap-x-1">
+            <TabsTrigger
+              value="calendar"
+              className="flex flex-row gap-x-1  rounded-md data-[state=active]:bg-neutral-800/40"
+            >
               Calendar
             </TabsTrigger>
           </TabsList>
-          <div className="flex flex-row gap-x-1 gap-y-1 flex-wrap mx-2">
-            <div className="flex flex-row items-center   gap-x-2">
+          <div className="flex flex-row gap-x-1 gap-y-1 w-full md:flex-nowrap flex-wrap sm:w-auto">
+            <div className="flex flex-row items-center w-full  gap-x-2">
               <SearchBar />
             </div>
-            <div className="flex flex-row gap-x-1">
+            <div className="flex flex-row  ">
               <AddColumn boardId={boardId.toString()} />
             </div>
           </div>
         </div>
         <Separator className="w-full " />
-        <div className="flex flex-row mx-2 mt-2">
+        <div className="mx-2 mt-2">
           <FilterButton />
         </div>
         {isLoading && (
