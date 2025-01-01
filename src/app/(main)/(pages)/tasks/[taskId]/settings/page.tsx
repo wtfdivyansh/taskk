@@ -16,6 +16,7 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { ArrowUpCircle, CheckCircle2, Info, LucideIcon, XCircle } from "lucide-react";
+import Image from "next/image";
 type Status = {
   value: string;
   label: string;
@@ -78,6 +79,18 @@ export default function Settings() {
                     save
                   </Button>
                   <Button>Cancel</Button>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="flex flex-col sm:flex-row gap-y-2 gap-x-1 ">
+                  <div className="flex flex-col gap-1 sm:w-1/3 ">
+                    <Label htmlFor="name">Icon</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Changes will update all tasks.
+                    </p>
+                  </div>
+                  <Image src={'gihub.png'} alt="github" width={50} height={50} className="border board-neutral-900/[0.2] rounded-md " />
+                  <Button variant={"ghost"} className="bg-neutral-900/30 text-neutral-400 ">Change avatar</Button>
                 </div>
               </div>
               <Separator className="opacity-40" />
@@ -154,7 +167,12 @@ export default function Settings() {
                   </p>
                 </div>
                 <div className=" flex flex-col ">
-                 <DatePicker className="w-80" value={new Date()} onChange={(value:Date) => console.log(value)} disabled={true} />
+                  <DatePicker
+                    className="w-80"
+                    value={new Date()}
+                    onChange={(value: Date) => console.log(value)}
+                    disabled={true}
+                  />
                 </div>
               </div>
             </div>
