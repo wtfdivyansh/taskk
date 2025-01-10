@@ -69,7 +69,7 @@ export interface MultipleSelectorProps {
    * First item selected is a default behavior by cmdk. That is why the default is true.
    * This is a workaround solution by add a dummy item.
    *
-   * @reference: https://github.com/pacocoursey/cmdk/issues/171
+   * @reference: https://acocoursey/cmdk/issues/171
    */
   selectFirstItem?: boolean;
   /** Allow user to create option when there is no option matched. */
@@ -83,7 +83,7 @@ export interface MultipleSelectorProps {
   >;
   /** hide the clear all button. */
   hideClearAllButton?: boolean;
-  showCreateTagButton?:boolean;
+  showCreateTagButton?: boolean;
 }
 
 export interface MultipleSelectorRef {
