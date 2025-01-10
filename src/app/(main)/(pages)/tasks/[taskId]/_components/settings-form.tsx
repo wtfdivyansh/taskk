@@ -19,7 +19,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   ArrowUpCircle,
   CheckCircle2,
-  Info,
   LucideIcon,
   XCircle,
 } from "lucide-react";
@@ -61,26 +60,38 @@ const statuses: Status[] = [
 export const SettingsFormSchema = z.object({
   name: z.string().min(1).optional(),
   icon: z.string().min(1).optional(),
-  status: z.enum(["done", "in progress", "canceled"]).optional(),
+  status: z.string().min(1).optional(),
   description: z.string().min(1).optional(),
   dueDate: z.coerce.date().optional(),
 });
-export default function SettingsForm() {
+interface SettingsFormProps {
+  initialSettings: {
+    name: string;
+    thumbnail: string | null;
+    status: string;
+    description: string | null;
+    targetDate: Date;
+  }
+}
+export default function SettingsForm({initialSettings}:SettingsFormProps) {
 
   const form = useForm<z.infer<typeof SettingsFormSchema>>({
     defaultValues: {
-      name: "",
-      icon: " ",
-      status: "in progress",
-      description: "",
-      dueDate: new Date(),
+      name: initialSettings?.name,
+      icon: initialSettings?.thumbnail ?? " ",
+      status: initialSettings?.status,
+      description: initialSettings?.description ?? " ",
+      dueDate: initialSettings?.targetDate,
     },
     resolver: zodResolver(SettingsFormSchema),
   });
+    const { formState } = form;
+    const { isDirty } = formState;
 
   const onSubmit = async (data: z.infer<typeof SettingsFormSchema>) => {
     console.log(data);
   };
+  
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -99,10 +110,13 @@ export default function SettingsForm() {
                     variant="outline"
                     type="submit"
                     className="bg-[#0f6fff] hover:bg-[#0f6fff]/80 text-md text-neutral-300 "
+                    disabled={!isDirty}
                   >
                     save
                   </Button>
-                  <Button>Cancel</Button>
+                  <Button className="bg-red-600 hover:bg-red-500 text-neutral-200" disabled={!isDirty} onClick={()=>{
+                    form.reset()
+                  }}>Discard</Button>
                 </div>
               </div>
               <FormField
@@ -158,7 +172,6 @@ export default function SettingsForm() {
                           <Input
                             id="name"
                             className=" w-80"
-                            defaultValue="taskk AI"
                             {...field}
                           />
                         </div>
@@ -184,7 +197,6 @@ export default function SettingsForm() {
                           </p>
                         </div>
                         <Select
-                          defaultValue="done"
                           value={field.value}
                           onValueChange={field.onChange}
                         >
@@ -236,8 +248,8 @@ export default function SettingsForm() {
                           <Textarea
                             id="tagline"
                             rows={3}
+                            placeholder="Short description of your project"
                             className="min-h-[100px] [resize:none] w-80"
-                            defaultValue="Untitled UI is the ultimate Figma UI kit and design system to kickstart any project, startup, or freelance designer."
                             {...field}
                           />
                           <div className="text-sm text-muted-foreground">
